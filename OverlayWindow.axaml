@@ -1,0 +1,92 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="150"
+        x:Class="DiscordMultiTool.OverlayWindow"
+        Title="DMT Overlay"
+        Width="300" Height="200"
+        SystemDecorations="None"
+
+        TransparencyLevelHint="Transparent"
+        Background="Transparent"
+        Topmost="True"
+        ShowInTaskbar="False"
+        CanResize="False"
+        ExtendClientAreaToDecorationsHint="True"
+        Icon="NEW LOGO.png">
+
+
+
+    <Border x:Name="RootBorder" Background="#BF0f172a" CornerRadius="12" BorderBrush="#334155" BorderThickness="1" Padding="16" BoxShadow="0 4 8 0 #40000000"
+            PointerPressed="OnPointerPressed"
+            PointerEntered="OnWindowPointerEnter"
+            PointerExited="OnWindowPointerExit">
+        <Grid RowDefinitions="Auto,*,Auto">
+            <!-- Header (Draggable) -->
+            <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Background="Transparent">
+                <StackPanel Orientation="Horizontal" Spacing="10">
+                    <!-- App Icon -->
+                    <Border CornerRadius="10" ClipToBounds="True" Width="36" Height="36">
+                        <Image Source="NEW LOGO.png" Stretch="UniformToFill" />
+                    </Border>
+                    <TextBlock x:Name="TitleText" Text="DiscordMultiTool" FontWeight="Bold" FontSize="16" Foreground="White" VerticalAlignment="Center" />
+                </StackPanel>
+                <Button x:Name="CloseButton" Grid.Column="1" Content="✕" Click="CloseOverlay" Foreground="#94a3b8" Background="Transparent" BorderThickness="0" Padding="4" Opacity="0">
+                    <Button.Transitions>
+                        <Transitions>
+                            <DoubleTransition Property="Opacity" Duration="0:0:0.2" />
+                        </Transitions>
+                    </Button.Transitions> 
+                </Button>
+            </Grid>
+
+            <!-- Function Items -->
+            <StackPanel Grid.Row="1" x:Name="FunctionContainer" Margin="0,16,0,0" Spacing="8">
+                <!-- Discord Bot -->
+                <TextBlock x:Name="DiscordBotText" 
+                          Text="Discord Bot: Inactive" 
+                          Foreground="#64748b" 
+                          FontSize="14" 
+                          FontWeight="Medium">
+                    <TextBlock.Transitions>
+                        <Transitions>
+                            <BrushTransition Property="Foreground" Duration="0:0:0.4" />
+                            <DoubleTransition Property="FontSize" Duration="0:0:0.3" />
+                        </Transitions>
+                    </TextBlock.Transitions>
+                </TextBlock>
+
+                <!-- Telegram Bot -->
+                <TextBlock x:Name="TelegramBotText" 
+                          Text="Telegram Bot: Inactive" 
+                          Foreground="#64748b" 
+                          FontSize="14" 
+                          FontWeight="Medium">
+                    <TextBlock.Transitions>
+                        <Transitions>
+                            <BrushTransition Property="Foreground" Duration="0:0:0.4" />
+                            <DoubleTransition Property="FontSize" Duration="0:0:0.3" />
+                        </Transitions>
+                    </TextBlock.Transitions>
+                </TextBlock>
+
+                <!-- Rich Presence -->
+                <TextBlock x:Name="RichPresenceText" 
+                          Text="Rich Presence: Inactive" 
+                          Foreground="#64748b" 
+                          FontSize="14" 
+                          FontWeight="Medium">
+                    <TextBlock.Transitions>
+                        <Transitions>
+                            <BrushTransition Property="Foreground" Duration="0:0:0.4" />
+                            <DoubleTransition Property="FontSize" Duration="0:0:0.3" />
+                        </Transitions>
+                    </TextBlock.Transitions>
+                </TextBlock>
+            </StackPanel>
+            
+            <TextBlock x:Name="VersionText" Grid.Row="2" Text="v3.0.0" Foreground="#475569" FontSize="10" HorizontalAlignment="Right" />
+        </Grid>
+    </Border>
+</Window>

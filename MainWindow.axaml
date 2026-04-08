@@ -1,0 +1,557 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:DiscordMultiTool"
+        x:Class="DiscordMultiTool.MainWindow"
+        Title="DiscordMultiTool v3.0"
+        Width="1200"
+        Height="700"
+        Icon="NEW LOGO.png"
+        Background="{DynamicResource BackgroundColor}">
+
+
+
+  <Grid x:Name="MainGrid" RowDefinitions="Auto,*,Auto" Background="{DynamicResource BackgroundColor}">
+    <!-- Main Area -->
+    <Grid Grid.Row="0" Grid.RowSpan="2" ColumnDefinitions="240,*" Background="{DynamicResource BackgroundColor}">
+      
+      <!-- Sidebar -->
+      <Border Grid.Column="0" Background="{DynamicResource SurfaceColor}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="0,0,1,0">
+        <Grid RowDefinitions="Auto,*">
+          <!-- App Title / Logo Area -->
+          <StackPanel Grid.Row="0" Margin="20,24">
+            <TextBlock Text="DiscordMultiTool" FontSize="20" FontWeight="Bold" Foreground="{DynamicResource ForegroundColor}" />
+            <TextBlock Text="v3.0 dashboard" FontSize="12" Foreground="{DynamicResource TextColor}" Margin="0,4,0,0" />
+          </StackPanel>
+
+          <!-- Navigation -->
+          <ScrollViewer Grid.Row="1" Margin="12,0">
+            <StackPanel Spacing="4">
+              <Button Content="{DynamicResource Str_Dashboard}" Click="NavigateToDashboard" Classes="SidebarButton" HorizontalAlignment="Stretch" />
+              <Button Content="{DynamicResource Str_RichPresence}" Click="NavigateToRichPresence" Classes="SidebarButton" HorizontalAlignment="Stretch" />
+              <Button Content="{DynamicResource Str_DiscordBot}" Click="NavigateToDiscordBot" Classes="SidebarButton" HorizontalAlignment="Stretch" />
+              <Button Content="{DynamicResource Str_TelegramBot}" Click="NavigateToTelegramBot" Classes="SidebarButton" HorizontalAlignment="Stretch" />
+              <Button Content="{DynamicResource Str_DiscordQuests}" Click="NavigateToDiscordQuests" Classes="SidebarButton" HorizontalAlignment="Stretch" />
+              <Button Content="{DynamicResource Str_ProcessManager}" Click="NavigateToProcessManager" Classes="SidebarButton" HorizontalAlignment="Stretch" />
+              <Separator Background="{DynamicResource BorderBrush}" Height="1" Margin="8,12" />
+              <Button Content="{DynamicResource Str_Settings}" Click="NavigateToSettings" Classes="SidebarButton" HorizontalAlignment="Stretch" />
+              <Separator Background="{DynamicResource BorderBrush}" Height="1" Margin="8,12" />
+              <Button Content="Account / Login" Click="NavigateToLogin" Classes="SidebarButton" HorizontalAlignment="Stretch" Background="#1e1e2e" Foreground="#cba6f7" />
+            </StackPanel>
+          </ScrollViewer>
+        </Grid>
+      </Border>
+
+      <!-- Content Area -->
+      <Border Grid.Column="1" Padding="32">
+        <Grid RowDefinitions="Auto,*">
+          <!-- Content Header -->
+          <StackPanel Grid.Row="0" Margin="0,0,0,24">
+             <TextBlock x:Name="PageTitle" Text="{DynamicResource Str_Header_Dashboard}" FontSize="28" FontWeight="Bold" Foreground="{DynamicResource ForegroundColor}" />
+             <TextBlock x:Name="PageDescription" Text="System overview and quick actions" FontSize="14" Foreground="{DynamicResource TextColor}" Margin="0,8,0,0" />
+          </StackPanel>
+
+          <!-- Views -->
+          <ScrollViewer x:Name="ContentScroller" Grid.Row="1">
+            <StackPanel>
+              
+              <!-- Dashboard Content -->
+              <StackPanel x:Name="DashboardContent" IsVisible="True" Classes="ContentPage">
+                <Grid ColumnDefinitions="*,*,*" Margin="0,0,0,24">
+                  <!-- Discord Status Card -->
+                  <Border x:Name="DiscordCard" Classes="AnimatedCard" Margin="0,0,12,0">
+                    <StackPanel>
+                      <TextBlock Text="Discord" FontSize="14" FontWeight="Bold" Foreground="#8b5cf6" Margin="0,0,0,12" />
+                      <TextBlock x:Name="DiscordStatusText" Text="{DynamicResource Str_Checking}" FontSize="13" Foreground="{DynamicResource TextColor}" Margin="0,0,0,16" />
+                      <Button Content="{DynamicResource Str_RefreshStatus}" Click="RefreshStatus" Classes="AnimatedButton" HorizontalAlignment="Left" />
+                    </StackPanel>
+                  </Border>
+
+                  <!-- Telegram Status Card -->
+                  <Border x:Name="TelegramCard" Grid.Column="1" Classes="AnimatedCard" Margin="0,0,12,0">
+                    <StackPanel>
+                      <TextBlock Text="Telegram" FontSize="14" FontWeight="Bold" Foreground="#10b981" Margin="0,0,0,12" />
+                      <TextBlock x:Name="TelegramStatusText" Text="{DynamicResource Str_Checking}" FontSize="13" Foreground="{DynamicResource TextColor}" Margin="0,0,0,16" />
+                      <Button Content="{DynamicResource Str_RefreshStatus}" Click="RefreshStatus" Classes="AnimatedButton" HorizontalAlignment="Left" />
+                    </StackPanel>
+                  </Border>
+
+                  <!-- App Info Card -->
+                  <Border x:Name="AppCard" Grid.Column="2" Classes="AnimatedCard">
+                    <StackPanel>
+                      <TextBlock Text="{DynamicResource Str_System}" FontSize="14" FontWeight="Bold" Foreground="{DynamicResource ForegroundColor}" Margin="0,0,0,12" />
+                      <TextBlock Text="v3.0.0 Stable" FontSize="13" Foreground="{DynamicResource TextColor}" Margin="0,0,0,16" />
+                      <Button Content="{DynamicResource Str_CheckUpdates}" Click="CheckUpdates_Click" Classes="AnimatedButton" HorizontalAlignment="Left" />
+                    </StackPanel>
+                  </Border>
+                </Grid>
+
+                <TextBlock Text="{DynamicResource Str_QuickActions}" FontSize="18" FontWeight="SemiBold" Foreground="{DynamicResource ForegroundColor}" Margin="0,0,0,16" />
+                <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto,Auto">
+                  <Button Content="{DynamicResource Str_SetRichPresence}" Click="NavigateToRichPresence" Classes="AnimatedButton" Margin="0,0,8,8" HorizontalAlignment="Stretch" />
+                  <Button Grid.Column="1" Content="{DynamicResource Str_LoadDiscordBot}" Click="NavigateToDiscordBot" Classes="AnimatedButton" Margin="8,0,0,8" HorizontalAlignment="Stretch" />
+                  <Button Grid.Row="1" Content="{DynamicResource Str_LoadTelegramBot}" Click="NavigateToTelegramBot" Classes="AnimatedButton" Margin="0,8,8,0" HorizontalAlignment="Stretch" />
+                  <Button Grid.Row="1" Grid.Column="1" Content="{DynamicResource Str_ProcessManager}" Click="NavigateToProcessManager" Classes="AnimatedButton" Margin="8,8,0,0" HorizontalAlignment="Stretch" />
+                  <Button Grid.Row="2" Grid.ColumnSpan="2" Content="{DynamicResource Str_ToggleOverlay}" Click="ToggleOverlay_Click" Classes="AnimatedButton" Margin="0,8,0,0" HorizontalAlignment="Stretch" Background="#334155" />
+                </Grid>
+              </StackPanel>
+
+              <!-- Rich Presence Content -->
+
+              <StackPanel x:Name="RichPresenceContent" IsVisible="False" Classes="ContentPage">
+                <ScrollViewer Height="500">
+                    <StackPanel Spacing="16">
+                        <!-- Basic Info -->
+                        <Border Classes="AnimatedCard">
+                          <StackPanel Spacing="16">
+                            <TextBlock Text="{DynamicResource Str_BasicInfo}" FontSize="16" FontWeight="SemiBold" Foreground="{DynamicResource ForegroundColor}" />
+                            <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto,Auto"  >
+                                <StackPanel Grid.Column="0" Margin="0,0,8,16">
+                                  <TextBlock Text="{DynamicResource Str_ClientID}" Foreground="{DynamicResource ForegroundColor}" FontSize="12" Margin="0,0,0,4" />
+                                  <TextBox x:Name="AppIdBox" Watermark="{DynamicResource WM_AppID}" Classes="ModernBox" />
+                                </StackPanel>
+                                <StackPanel Grid.Column="1" Margin="8,0,0,16">
+                                  <TextBlock Text="{DynamicResource Str_Details}" Foreground="{DynamicResource ForegroundColor}" FontSize="12" Margin="0,0,0,4" />
+                                  <TextBox x:Name="DetailsBox" Watermark="{DynamicResource WM_Details}" Classes="ModernBox" />
+                                </StackPanel>
+                                
+                                <StackPanel Grid.Row="1" Grid.Column="0" Margin="0,0,8,0">
+                                  <TextBlock Text="{DynamicResource Str_State}" Foreground="{DynamicResource ForegroundColor}" FontSize="12" Margin="0,0,0,4" />
+                                  <TextBox x:Name="StateBox" Watermark="{DynamicResource WM_State}" Classes="ModernBox" />
+                                </StackPanel>
+                                
+                                <CheckBox x:Name="TimestampCheck" Grid.Row="1" Grid.Column="1" Content="{DynamicResource Str_ShowTime}" Margin="8,20,0,0" Foreground="{DynamicResource TextColor}" />
+
+                                <!-- Row 2: Activity Type -->
+                                <StackPanel Grid.Row="2" Grid.Column="0" Margin="0,16,8,0">
+                                  <TextBlock Text="{DynamicResource Str_ActivityType}" Foreground="{DynamicResource ForegroundColor}" FontSize="12" Margin="0,0,0,4" />
+                                  <ComboBox x:Name="ActivityTypeSelector" SelectedIndex="0" HorizontalAlignment="Stretch">
+                                      <ComboBoxItem Content="{DynamicResource Str_Act_Playing}" />
+                                      <ComboBoxItem Content="{DynamicResource Str_Act_Listening}" />
+                                      <ComboBoxItem Content="{DynamicResource Str_Act_Watching}" />
+                                      <ComboBoxItem Content="{DynamicResource Str_Act_Competing}" />
+                                  </ComboBox>
+                                </StackPanel>
+                            </Grid>
+                          </StackPanel>
+                        </Border>
+
+                        <!-- Images -->
+                        <Border Classes="AnimatedCard">
+                          <StackPanel Spacing="16">
+                            <TextBlock Text="{DynamicResource Str_Images}" FontSize="16" FontWeight="SemiBold" Foreground="{DynamicResource ForegroundColor}" />
+                            <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto">
+                                <StackPanel Grid.Row="0" Grid.Column="0" Margin="0,0,8,16">
+                                  <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
+                                      <TextBlock Text="{DynamicResource Str_LargeImgKey}" Foreground="{DynamicResource ForegroundColor}" FontSize="12" />
+                                      <TextBlock Text="(?) " Foreground="{DynamicResource AccentColor}" FontSize="12" Margin="4,0,0,0" Cursor="Help"
+                                                 ToolTip.Tip="1. Go to Discord Developer Portal -> Your App -> Rich Presence -> Art Assets.&#x0a;2. Upload an image and give it a name (e.g. 'my-logo').&#x0a;3. Type that EXACT name here." />
+                                  </StackPanel>
+                                  <TextBox x:Name="LargeImageKeyBox" Watermark="{DynamicResource WM_KeyName}" Classes="ModernBox" />
+                                </StackPanel>
+                                <StackPanel Grid.Row="0" Grid.Column="1" Margin="8,0,0,16">
+                                  <TextBlock Text="{DynamicResource Str_LargeImgText}" Foreground="{DynamicResource ForegroundColor}" FontSize="12" Margin="0,0,0,4" />
+                                  <TextBox x:Name="LargeImageTextBox" Watermark="{DynamicResource WM_HoverText}" Classes="ModernBox" />
+                                </StackPanel>
+
+                                <StackPanel Grid.Row="1" Grid.Column="0" Margin="0,0,8,0">
+                                  <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
+                                      <TextBlock Text="{DynamicResource Str_SmallImgKey}" Foreground="{DynamicResource ForegroundColor}" FontSize="12" />
+                                      <TextBlock Text="(?) " Foreground="{DynamicResource AccentColor}" FontSize="12" Margin="4,0,0,0" Cursor="Help"
+                                                 ToolTip.Tip="1. Go to Discord Developer Portal -> Your App -> Rich Presence -> Art Assets.&#x0a;2. Upload an image and give it a name (e.g. 'my-logo').&#x0a;3. Type that EXACT name here." />
+                                  </StackPanel>
+                                  <TextBox x:Name="SmallImageKeyBox" Watermark="{DynamicResource WM_KeyName}" Classes="ModernBox" />
+                                </StackPanel>
+                                <StackPanel Grid.Row="1" Grid.Column="1" Margin="8,0,0,0">
+                                  <TextBlock Text="{DynamicResource Str_SmallImgText}" Foreground="{DynamicResource ForegroundColor}" FontSize="12" Margin="0,0,0,4" />
+                                  <TextBox x:Name="SmallImageTextBox" Watermark="{DynamicResource WM_HoverText}" Classes="ModernBox" />
+                                </StackPanel>
+                            </Grid>
+                          </StackPanel>
+                        </Border>
+
+                        <!-- Buttons -->
+                        <Border Classes="AnimatedCard">
+                          <StackPanel Spacing="16">
+                            <TextBlock Text="{DynamicResource Str_Buttons}" FontSize="16" FontWeight="SemiBold" Foreground="{DynamicResource ForegroundColor}" />
+                            <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto">
+                                <!-- Button 1 -->
+                                <StackPanel Grid.Row="0" Grid.Column="0" Margin="0,0,8,16">
+                                  <TextBlock Text="{DynamicResource Str_Btn1Label}" Foreground="{DynamicResource ForegroundColor}" FontSize="12" Margin="0,0,0,4" />
+                                  <TextBox x:Name="Btn1LabelBox" Watermark="{DynamicResource WM_BtnLabel}" Classes="ModernBox" />
+                                </StackPanel>
+                                <StackPanel Grid.Row="0" Grid.Column="1" Margin="8,0,0,16">
+                                  <TextBlock Text="{DynamicResource Str_Btn1Url}" Foreground="{DynamicResource ForegroundColor}" FontSize="12" Margin="0,0,0,4" />
+                                  <TextBox x:Name="Btn1UrlBox" Watermark="{DynamicResource WM_BtnUrl}" Classes="ModernBox" />
+                                </StackPanel>
+
+                                <!-- Button 2 -->
+                                <StackPanel Grid.Row="1" Grid.Column="0" Margin="0,0,8,0">
+                                  <TextBlock Text="{DynamicResource Str_Btn2Label}" Foreground="{DynamicResource ForegroundColor}" FontSize="12" Margin="0,0,0,4" />
+                                  <TextBox x:Name="Btn2LabelBox" Watermark="{DynamicResource WM_BtnLabel}" Classes="ModernBox" />
+                                </StackPanel>
+                                <StackPanel Grid.Row="1" Grid.Column="1" Margin="8,0,0,0">
+                                  <TextBlock Text="{DynamicResource Str_Btn2Url}" Foreground="{DynamicResource ForegroundColor}" FontSize="12" Margin="0,0,0,4" />
+                                  <TextBox x:Name="Btn2UrlBox" Watermark="{DynamicResource WM_BtnUrl}" Classes="ModernBox" />
+                                </StackPanel>
+                            </Grid>
+                          </StackPanel>
+                        </Border>
+                   
+                        <!-- Party Info -->
+                        <Border Classes="AnimatedCard">
+                          <StackPanel Spacing="16">
+                            <TextBlock Text="{DynamicResource Str_Party}" FontSize="16" FontWeight="SemiBold" Foreground="{DynamicResource ForegroundColor}" />
+                            <Grid ColumnDefinitions="*,*">
+                                <StackPanel Grid.Column="0" Margin="0,0,8,0">
+                                  <TextBlock Text="{DynamicResource Str_CurSize}" Foreground="{DynamicResource ForegroundColor}" FontSize="12" Margin="0,0,0,4" />
+                                  <TextBox x:Name="PartySizeBox" Watermark="0" Classes="ModernBox" />
+                                </StackPanel>
+                                <StackPanel Grid.Column="1" Margin="8,0,0,0">
+                                  <TextBlock Text="{DynamicResource Str_MaxSize}" Foreground="{DynamicResource ForegroundColor}" FontSize="12" Margin="0,0,0,4" />
+                                  <TextBox x:Name="PartyMaxBox" Watermark="0" Classes="ModernBox" />
+                                </StackPanel>
+                            </Grid>
+                          </StackPanel>
+                        </Border>
+
+                        <Button Content="{DynamicResource Str_UpdatePresence}" Click="UpdatePresence_Click" Classes="AnimatedButton" HorizontalAlignment="Stretch" Margin="0,0,0,8" />
+                        <Button Content="{DynamicResource Str_ClearPresence}" Click="ClearPresence_Click" Classes="AnimatedButton" HorizontalAlignment="Stretch" Margin="0,0,0,24" Background="#7f1d1d" Foreground="#fca5a5" />
+                    </StackPanel>
+                </ScrollViewer>
+              </StackPanel>
+
+              <!-- Discord Bot -->
+              <StackPanel x:Name="DiscordBotContent" IsVisible="False" Classes="ContentPage">
+                <Border Classes="AnimatedCard">
+                  <StackPanel Spacing="20">
+                    <StackPanel>
+                      <TextBlock Text="{DynamicResource Str_BotToken}" Foreground="{DynamicResource ForegroundColor}" FontSize="14" FontWeight="Medium" Margin="0,0,0,8" />
+                      <TextBox Watermark="{DynamicResource WM_Token}" Classes="ModernBox" Padding="12" PasswordChar="•" />
+                    </StackPanel>
+                    <StackPanel>
+                      <TextBlock Text="{DynamicResource Str_ScriptPath}" Foreground="{DynamicResource ForegroundColor}" FontSize="14" FontWeight="Medium" Margin="0,0,0,8" />
+                      <TextBox Watermark="{DynamicResource WM_Path}" Classes="ModernBox" Padding="12" />
+                    </StackPanel>
+                    <Button Content="{DynamicResource Str_LaunchBot}" Classes="AnimatedButton" HorizontalAlignment="Left" Padding="24,10" />
+                  </StackPanel>
+                </Border>
+              </StackPanel>
+
+              <!-- Telegram Bot -->
+              <StackPanel x:Name="TelegramBotContent" IsVisible="False" Classes="ContentPage">
+                <Border Classes="AnimatedCard">
+                  <StackPanel Spacing="20">
+                    <StackPanel>
+                      <TextBlock Text="{DynamicResource Str_BotToken}" Foreground="{DynamicResource ForegroundColor}" FontSize="14" FontWeight="Medium" Margin="0,0,0,8" />
+                      <TextBox Watermark="{DynamicResource WM_Token}" Classes="ModernBox" Padding="12" PasswordChar="•" />
+                    </StackPanel>
+                    <StackPanel>
+                      <TextBlock Text="{DynamicResource Str_ScriptPath}" Foreground="{DynamicResource ForegroundColor}" FontSize="14" FontWeight="Medium" Margin="0,0,0,8" />
+                      <TextBox Watermark="{DynamicResource WM_Path}" Classes="ModernBox" Padding="12" />
+                    </StackPanel>
+                    <Button Content="{DynamicResource Str_LaunchBot}" Classes="AnimatedButton" HorizontalAlignment="Left" Padding="24,10" />
+                  </StackPanel>
+                </Border>
+              </StackPanel>
+
+              <!-- Discord Quests -->
+              <StackPanel x:Name="DiscordQuestsContent" IsVisible="False" Classes="ContentPage">
+                <Border Classes="AnimatedCard" Margin="0,0,0,16">
+                  <StackPanel Spacing="16">
+                    <TextBlock Text="{DynamicResource Str_DiscordToken}" Foreground="{DynamicResource ForegroundColor}" FontSize="16" FontWeight="SemiBold" />
+                    <Grid ColumnDefinitions="*,Auto">
+                      <TextBox x:Name="DiscordUserTokenBox" Watermark="{DynamicResource WM_TokenUser}" Classes="ModernBox" PasswordChar="•" />
+                      <Button Grid.Column="1" Content="{DynamicResource Str_FetchQuests}" Click="FetchQuests_Click" Classes="AnimatedButton" Margin="12,0,0,0" />
+                    </Grid>
+                  </StackPanel>
+                </Border>
+
+                <Border Classes="AnimatedCard" Padding="0">
+                  <Grid RowDefinitions="Auto,*,Auto">
+                    <Border Grid.Row="0" Padding="12" Background="{DynamicResource SurfaceColor}">
+                      <Grid ColumnDefinitions="2*,*,*,*">
+                        <TextBlock Text="{DynamicResource Str_QuestName}" FontWeight="Bold" Foreground="{DynamicResource TextColor}" />
+                        <TextBlock Grid.Column="1" Text="{DynamicResource Str_QuestType}" FontWeight="Bold" Foreground="{DynamicResource TextColor}" />
+                        <TextBlock Grid.Column="2" Text="{DynamicResource Str_QuestProgress}" FontWeight="Bold" Foreground="{DynamicResource TextColor}" />
+                        <TextBlock Grid.Column="3" Text="{DynamicResource Str_QuestStatus}" FontWeight="Bold" Foreground="{DynamicResource TextColor}" />
+                      </Grid>
+                    </Border>
+                    <ListBox x:Name="QuestsListBox" Grid.Row="1" Height="300" Background="Transparent" BorderThickness="0">
+                      <ListBox.ItemTemplate>
+                        <DataTemplate>
+                          <Grid ColumnDefinitions="2*,*,*,*">
+                            <TextBlock Text="{Binding QuestName}" VerticalAlignment="Center" />
+                            <TextBlock Grid.Column="1" Text="{Binding TaskName}" VerticalAlignment="Center" />
+                            <TextBlock Grid.Column="2" Text="{Binding ProgressText}" VerticalAlignment="Center" />
+                            <TextBlock Grid.Column="3" Text="{Binding Status}" Foreground="{Binding StatusColor}" VerticalAlignment="Center" />
+                          </Grid>
+                        </DataTemplate>
+                      </ListBox.ItemTemplate>
+                    </ListBox>
+                    <Border Grid.Row="2" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="0,1,0,0" Padding="12">
+                      <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="12">
+                         <Button x:Name="StopQuestsBtn" Content="{DynamicResource Str_StopQuests}" Click="StopQuests_Click" Classes="AnimatedButton" Background="#7f1d1d" Foreground="#fca5a5" IsEnabled="False" />
+                         <Button x:Name="StartQuestsBtn" Content="{DynamicResource Str_StartQuests}" Click="StartQuests_Click" Classes="AnimatedButton" IsEnabled="True" />
+                      </StackPanel>
+                    </Border>
+                  </Grid>
+                </Border>
+              </StackPanel>
+
+              <!-- Process Manager -->
+              <StackPanel x:Name="ProcessManagerContent" IsVisible="False" Classes="ContentPage">
+                <Grid ColumnDefinitions="*,Auto" Margin="0,0,0,8">
+                  <TextBlock Text="{DynamicResource Str_ActiveProcesses}" FontSize="16" FontWeight="SemiBold" VerticalAlignment="Center" />
+                  <Button Grid.Column="1" Content="{DynamicResource Str_Refresh}" Click="RefreshProcesses_Click" Classes="AnimatedButton" Padding="12,6" FontSize="12" />
+                </Grid>
+                <Border Classes="AnimatedCard" Padding="0">
+                  <Grid RowDefinitions="*,Auto">
+                    <ListBox x:Name="ProcessListBox" Height="400" Background="Transparent" BorderThickness="0" Margin="2" />
+                    <Border Grid.Row="1" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="0,1,0,0" Padding="12">
+                       <Button Content="{DynamicResource Str_EndProcess}" Click="KillProcess_Click" Classes="AnimatedButton" HorizontalAlignment="Right" Background="#7f1d1d" Foreground="#fca5a5" />
+                    </Border>
+                  </Grid>
+                </Border>
+              </StackPanel>
+
+              <!-- Settings -->
+              <StackPanel x:Name="SettingsContent" IsVisible="False" Classes="ContentPage">
+                <Border Classes="AnimatedCard">
+                  <StackPanel Spacing="24">
+
+                     <StackPanel>
+                       <TextBlock Text="{DynamicResource Str_Behavior}" FontSize="16" FontWeight="Bold" Margin="0,0,0,16" />
+                       <Grid ColumnDefinitions="*,Auto">
+                         <StackPanel>
+                           <TextBlock Text="{DynamicResource Str_AutoStart}" FontWeight="Medium" />
+                           <TextBlock Text="{DynamicResource Str_AutoStartDesc}" FontSize="12" Foreground="{DynamicResource TextColor}" Margin="0,4,0,0" />
+                         </StackPanel>
+                        <ToggleSwitch x:Name="AutoStartSwitch" Grid.Column="1" OnContent="On" OffContent="Off" />
+                      </Grid>
+                      <Separator Background="{DynamicResource BorderBrush}" Height="1" Margin="0,12" />
+                      <Grid ColumnDefinitions="*,Auto">
+                        <StackPanel>
+                          <TextBlock Text="{DynamicResource Str_OverlayPos}" FontWeight="Medium" />
+                          <TextBlock Text="{DynamicResource Str_OverlayPosDesc}" FontSize="12" Foreground="{DynamicResource TextColor}" Margin="0,4,0,0" />
+                        </StackPanel>
+                        <ComboBox x:Name="OverlayPosSelector" Grid.Column="1" Width="150" SelectedIndex="0">
+                          <ComboBoxItem Tag="Top Left" Content="{DynamicResource Str_Pos_TopLeft}" />
+                          <ComboBoxItem Tag="Top Right" Content="{DynamicResource Str_Pos_TopRight}" />
+                          <ComboBoxItem Tag="Bottom Left" Content="{DynamicResource Str_Pos_BotLeft}" />
+                          <ComboBoxItem Tag="Bottom Right" Content="{DynamicResource Str_Pos_BotRight}" />
+                        </ComboBox>
+                      </Grid>
+
+                      <!-- Language Selector -->
+                      <Separator Background="{DynamicResource BorderBrush}" Height="1" Margin="0,12" />
+                      <Grid ColumnDefinitions="*,Auto">
+                        <StackPanel>
+                          <TextBlock Text="{DynamicResource Str_Language}" FontWeight="Medium" />
+                          <TextBlock Text="{DynamicResource Str_LanguageDesc}" FontSize="12" Foreground="{DynamicResource TextColor}" Margin="0,4,0,0" />
+                        </StackPanel>
+                        <ComboBox x:Name="LanguageChoice" Grid.Column="1" Width="150" SelectedIndex="0" SelectionChanged="LanguageChoice_SelectionChanged">
+                           <ComboBoxItem Tag="en">English</ComboBoxItem>
+                           <ComboBoxItem Tag="it">Italiano</ComboBoxItem>
+                        </ComboBox>
+                      </Grid>
+
+                      <!-- Close Button Behavior -->
+                      <Separator Background="{DynamicResource BorderBrush}" Height="1" Margin="0,12" />
+                      <Grid ColumnDefinitions="*,Auto">
+                        <StackPanel>
+                          <TextBlock Text="{DynamicResource Str_CloseButtonBehavior}" FontWeight="Medium" />
+                          <TextBlock Text="{DynamicResource Str_CloseButtonBehaviorDesc}" FontSize="12" Foreground="{DynamicResource TextColor}" Margin="0,4,0,0" />
+                        </StackPanel>
+                        <ComboBox x:Name="CloseButtonBehaviorSelector" Grid.Column="1" Width="150" SelectedIndex="0">
+                          <ComboBoxItem Tag="minimize" Content="{DynamicResource Str_MinimizeToTray}" />
+                          <ComboBoxItem Tag="close" Content="{DynamicResource Str_CloseApp}" />
+                        </ComboBox>
+                      </Grid>
+
+                      <!-- Overlay Appearance -->
+                      <Separator Background="{DynamicResource BorderBrush}" Height="1" Margin="0,12" />
+                      <TextBlock Text="{DynamicResource Str_Settings_Appearance}" FontWeight="Bold" Margin="0,0,0,8" />
+                      
+                       <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto" Margin="0,0,10,0">
+                          <!-- Row 0: Rainbow Mode -->
+                          <StackPanel Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,0,12">
+                              <TextBlock Text="{DynamicResource Str_Settings_Rainbow}" FontWeight="Medium" />
+                              <TextBlock Text="{DynamicResource Str_Settings_RainbowDesc}" FontSize="11" Foreground="{DynamicResource TextColor}" />
+                          </StackPanel>
+                          <ToggleSwitch x:Name="OverlayRainbowSwitch" Grid.Row="0" Grid.Column="1" OnContent="On" OffContent="Off" HorizontalAlignment="Right" Checked="OnRealTimeSettingChanged" Unchecked="OnRealTimeSettingChanged" Margin="0,0,0,12" />
+
+                          <!-- Row 1: Show Border -->
+                          <StackPanel Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,0,12">
+                              <TextBlock Text="{DynamicResource Str_Settings_Border}" FontWeight="Medium" />
+                              <TextBlock Text="{DynamicResource Str_Settings_BorderDesc}" FontSize="11" Foreground="{DynamicResource TextColor}" />
+                          </StackPanel>
+                          <ToggleSwitch x:Name="OverlayBorderSwitch" Grid.Row="1" Grid.Column="1" OnContent="On" OffContent="Off" IsChecked="True" HorizontalAlignment="Right" Checked="OnRealTimeSettingChanged" Unchecked="OnRealTimeSettingChanged" Margin="0,0,0,12" />
+
+                          <!-- Row 2: Inverted Text -->
+
+
+                          <!-- Row 3: Background Opacity -->
+                          <StackPanel Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,0,12">
+                              <TextBlock Text="{DynamicResource Str_Settings_BgOpacity}" FontWeight="Medium" />
+                          </StackPanel>
+                          <local:SmoothSlider x:Name="OverlayBgOpacitySlider" Grid.Row="3" Grid.Column="1" Width="150" Minimum="0" Maximum="1" Value="0.75" ValueChanged="OnSliderChanged" Margin="0,0,0,12" />
+
+                          <!-- Row 4: Master Opacity -->
+                          <StackPanel Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,0,12">
+                              <TextBlock Text="{DynamicResource Str_Settings_MasterOpacity}" FontWeight="Medium" />
+                          </StackPanel>
+                          <local:SmoothSlider x:Name="OverlayMasterOpacitySlider" Grid.Row="4" Grid.Column="1" Width="150" Minimum="0.1" Maximum="1" Value="1.0" ValueChanged="OnSliderChanged" Margin="0,0,0,12" />
+                      </Grid>
+
+                      <Separator Background="{DynamicResource BorderBrush}" Height="1" Margin="0,12" />
+                      
+                      <!-- Color Editor Section -->
+                      <Border Classes="AnimatedCard" Padding="20" Margin="0,12,0,0">
+                        <StackPanel Spacing="16">
+                          <TextBlock Text="{DynamicResource Str_ColorEditor}" FontWeight="Bold" FontSize="16" Foreground="{DynamicResource ForegroundColor}" />
+                          <Grid ColumnDefinitions="*,Auto,Auto" RowDefinitions="Auto,Auto">
+                          <StackPanel Grid.Row="0" Grid.Column="0" VerticalAlignment="Center">
+                              <TextBlock Text="{DynamicResource Str_EditTarget}" FontWeight="Medium" />
+                              <TextBlock Text="{DynamicResource Str_EditTargetDesc}" FontSize="11" Foreground="{DynamicResource TextColor}" />
+                          </StackPanel>
+                          <ComboBox x:Name="ColorTargetSelector" Grid.Row="0" Grid.Column="1" Width="140" Margin="0,0,12,0" SelectedIndex="0" SelectionChanged="OnColorTargetChanged">
+                              <ComboBoxItem Tag="bg">Background</ComboBoxItem>
+                              <ComboBoxItem Tag="border">Border</ComboBoxItem>
+                              <ComboBoxItem Tag="text">Text</ComboBoxItem>
+                          </ComboBox>
+                          
+                          <!-- Hex Color Input -->
+                          <StackPanel Grid.Row="0" Grid.Column="2" VerticalAlignment="Center">
+                              <TextBlock Text="{DynamicResource Str_HexColor}" FontSize="11" Foreground="{DynamicResource TextColor}" Margin="0,0,0,4" />
+                              <TextBox x:Name="HexColorInput" Width="100" Classes="ModernBox" Watermark="#RRGGBB" TextChanged="OnHexInputChanged" />
+                          </StackPanel>
+
+                          <!-- Color Picker Section -->
+                          <StackPanel Grid.Row="1" Grid.ColumnSpan="3" Margin="0,20,0,0" Spacing="16" HorizontalAlignment="Stretch">
+                              <TextBlock Text="{DynamicResource Str_ColorWheel}" FontSize="12" Foreground="{DynamicResource TextColor}" FontWeight="Medium" />
+                              
+                              <!-- Color Preview -->
+                              <Border x:Name="ColorPreviewBorder" Height="100" CornerRadius="8" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="2" HorizontalAlignment="Stretch" Margin="0,0,0,8" Background="#643464" />
+                              
+                              <!-- RGB Sliders -->
+                              <StackPanel Spacing="12">
+                                  <!-- Red Slider -->
+                                  <StackPanel>
+                                      <Grid ColumnDefinitions="40,*,40">
+                                          <TextBlock Text="R:" Foreground="{DynamicResource TextColor}" FontSize="11" VerticalAlignment="Center" />
+                                          <local:SmoothSlider x:Name="RedSlider" Grid.Column="1" Minimum="0" Maximum="255" Value="100" ValueChanged="OnColorSliderChanged" Margin="8,0" />
+                                          <TextBlock x:Name="RedValue" Grid.Column="2" Text="100" Foreground="{DynamicResource TextColor}" FontSize="11" TextAlignment="Right" VerticalAlignment="Center" />
+                                      </Grid>
+                                  </StackPanel>
+                                  
+                                  <!-- Green Slider -->
+                                  <StackPanel>
+                                      <Grid ColumnDefinitions="40,*,40">
+                                          <TextBlock Text="G:" Foreground="{DynamicResource TextColor}" FontSize="11" VerticalAlignment="Center" />
+                                          <local:SmoothSlider x:Name="GreenSlider" Grid.Column="1" Minimum="0" Maximum="255" Value="100" ValueChanged="OnColorSliderChanged" Margin="8,0" />
+                                          <TextBlock x:Name="GreenValue" Grid.Column="2" Text="100" Foreground="{DynamicResource TextColor}" FontSize="11" TextAlignment="Right" VerticalAlignment="Center" />
+                                      </Grid>
+                                  </StackPanel>
+                                  
+                                  <!-- Blue Slider -->
+                                  <StackPanel>
+                                      <Grid ColumnDefinitions="40,*,40">
+                                          <TextBlock Text="B:" Foreground="{DynamicResource TextColor}" FontSize="11" VerticalAlignment="Center" />
+                                          <local:SmoothSlider x:Name="BlueSlider" Grid.Column="1" Minimum="0" Maximum="255" Value="100" ValueChanged="OnColorSliderChanged" Margin="8,0" />
+                                          <TextBlock x:Name="BlueValue" Grid.Column="2" Text="100" Foreground="{DynamicResource TextColor}" FontSize="11" TextAlignment="Right" VerticalAlignment="Center" />
+                                      </Grid>
+                                  </StackPanel>
+                              </StackPanel>
+                              
+                              <!-- Alpha Slider -->
+                              <StackPanel Margin="0,8,0,0">
+                                  <Grid ColumnDefinitions="40,*,40">
+                                      <TextBlock Text="{DynamicResource Str_Opacity}" Foreground="{DynamicResource TextColor}" FontSize="11" VerticalAlignment="Center" />
+                                      <local:SmoothSlider x:Name="AlphaSlider" Grid.Column="1" Minimum="0" Maximum="255" Value="255" ValueChanged="OnColorSliderChanged" Margin="8,0" />
+                                      <TextBlock x:Name="AlphaValue" Grid.Column="2" Text="255" Foreground="{DynamicResource TextColor}" FontSize="11" TextAlignment="Right" VerticalAlignment="Center" />
+                                  </Grid>
+                              </StackPanel>
+                          </StackPanel>
+                          </Grid>
+                        </StackPanel>
+                      </Border>
+
+                     </StackPanel>
+                     <Button x:Name="SaveSettingsBtn" Content="{DynamicResource Str_SaveConfig}" Click="SaveSettings" Classes="AnimatedButton" HorizontalAlignment="Right" />
+                  </StackPanel>
+                </Border>
+              </StackPanel>
+
+              <!-- Firebase Login Content -->
+              <StackPanel x:Name="LoginContent" IsVisible="False" Classes="ContentPage">
+                <Border Classes="AnimatedCard" Padding="32">
+                  <StackPanel Spacing="16" Width="400" HorizontalAlignment="Left">
+                    <TextBlock Text="Authentication" FontSize="20" FontWeight="Bold" Foreground="{DynamicResource ForegroundColor}" Margin="0,0,0,8" />
+                    
+                    <StackPanel>
+                      <TextBlock Text="Email" Foreground="{DynamicResource ForegroundColor}" FontSize="14" FontWeight="Medium" Margin="0,0,0,8" />
+                      <TextBox x:Name="LoginEmailBox" Watermark="user@example.com" Classes="ModernBox" Padding="12" />
+                    </StackPanel>
+
+                    <StackPanel>
+                      <TextBlock Text="Password" Foreground="{DynamicResource ForegroundColor}" FontSize="14" FontWeight="Medium" Margin="0,0,0,8" />
+                      <TextBox x:Name="LoginPasswordBox" Watermark="••••••••" Classes="ModernBox" Padding="12" PasswordChar="•" />
+                    </StackPanel>
+
+                    <TextBlock x:Name="LoginStatusText" Text="" Foreground="#fca5a5" FontSize="13" TextWrapping="Wrap" />
+
+                    <Grid ColumnDefinitions="*,*" Margin="0,16,0,0">
+                      <Button Content="Log In" Click="Login_Click" Classes="AnimatedButton" HorizontalAlignment="Stretch" Margin="0,0,8,0" />
+                      <Button Grid.Column="1" Content="Register" Click="Register_Click" Classes="AnimatedButton" HorizontalAlignment="Stretch" Background="#334155" Margin="8,0,0,0" />
+                    </Grid>
+                    
+                    <Button Content="Login with Google" Click="LoginGoogle_Click" Classes="AnimatedButton" HorizontalAlignment="Stretch" Background="#4285F4" Foreground="White" Margin="0,8,0,0">
+                        <Button.Content>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="8">
+                                <PathIcon Data="M21.35,11.1H12.18V13.83H18.69C18.36,17.64 15.19,19.27 12.19,19.27C8.36,19.27 5,16.25 5,12C5,7.9 8.2,4.73 12.2,4.73C15.29,4.73 17.1,6.7 17.1,6.7L19,4.72C19,4.72 16.56,2 12.1,2C6.42,2 2.03,6.8 2.03,12C2.03,17.05 6.16,22 12.25,22C17.6,22 21.5,18.33 21.5,12.91C21.5,11.76 21.35,11.1 21.35,11.1Z" />
+                                <TextBlock Text="Login with Google" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button.Content>
+                    </Button>
+                  </StackPanel>
+                </Border>
+              </StackPanel>
+
+            </StackPanel>
+          </ScrollViewer>
+        </Grid>
+      </Border>
+    </Grid>
+
+    <!-- Status Bar -->
+    <Border Grid.Row="2" Background="{DynamicResource SurfaceColor}" BorderBrush="#334155" BorderThickness="0,1,0,0">
+      <TextBlock x:Name="StatusBar" Text="Ready" FontSize="12" Foreground="{DynamicResource TextColor}" Margin="20,8,20,8" />
+    </Border>
+
+    <!-- Intro Overlay -->
+    <Grid x:Name="IntroOverlay" Grid.RowSpan="3" Background="#0F172A" IsVisible="True" Opacity="1">
+      <Grid x:Name="IntroContent" HorizontalAlignment="Center" VerticalAlignment="Center" ColumnDefinitions="Auto,Auto">
+        
+        <!-- Left: Logo -->
+        <Image Grid.Column="0" Source="NEW LOGO.png" Width="150" Height="150" x:Name="IntroLogo" Opacity="0">
+            <Image.RenderTransform>
+                <TranslateTransform X="160" />
+            </Image.RenderTransform>
+        </Image>
+
+        <!-- Right: Text -->
+        <StackPanel x:Name="IntroTextPanel" Grid.Column="1" VerticalAlignment="Center" Margin="40,0,0,0" Opacity="0">
+          <TextBlock x:Name="IntroDiscordText" Text="Checking if discord is open..." FontSize="18" Foreground="{DynamicResource TextColor}" />
+          <TextBlock x:Name="IntroDiscordFound" Text="" FontSize="18" FontWeight="Bold" Margin="0,4,0,16" Opacity="0" />
+          
+          <TextBlock x:Name="IntroTelegramText" Text="Checking if telegram is open..." FontSize="18" Foreground="{DynamicResource TextColor}" Opacity="0" />
+          <TextBlock x:Name="IntroTelegramFound" Text="" FontSize="18" FontWeight="Bold" Margin="0,4,0,16" Opacity="0" />
+          
+          <ProgressBar x:Name="IntroProgressBar" IsIndeterminate="True" Width="250" Height="4" Foreground="{DynamicResource AccentColor}" HorizontalAlignment="Left" />
+        </StackPanel>
+        
+      </Grid>
+    </Grid>
+  </Grid>
+
+</Window>
