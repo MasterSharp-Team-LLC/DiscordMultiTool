@@ -231,13 +231,10 @@ public partial class MainWindow : Window
         if (AppIdBox != null) AppIdBox.Text = config.AppId;
         if (DetailsBox != null) DetailsBox.Text = config.Details;
         if (StateBox != null) StateBox.Text = config.State;
-        if (TimestampCheck != null) TimestampCheck.IsChecked = config.ShowTimestamp;
-        if (ActivityTypeSelector != null) ActivityTypeSelector.SelectedIndex = config.ActivityType;
+                if (TimestampCheck != null) TimestampCheck.IsChecked = config.ShowTimestamp;
+                if (ActivityTypeSelector != null) ActivityTypeSelector.SelectedIndex = config.ActivityType;
         
-        if (DiscordUserTokenBox != null) DiscordUserTokenBox.Text = config.DiscordToken;
-        
-        if (LargeImageKeyBox != null) LargeImageKeyBox.Text = config.LargeImageKey;
-        if (LargeImageTextBox != null) LargeImageTextBox.Text = config.LargeImageText;
+                if (LargeImageKeyBox != null) LargeImageKeyBox.Text = config.LargeImageKey;        if (LargeImageTextBox != null) LargeImageTextBox.Text = config.LargeImageText;
         if (SmallImageKeyBox != null) SmallImageKeyBox.Text = config.SmallImageKey;
         if (SmallImageTextBox != null) SmallImageTextBox.Text = config.SmallImageText;
         
@@ -315,18 +312,12 @@ public partial class MainWindow : Window
              PageTitle.Text = GetString("Str_DiscordBot");
              PageDescription.Text = GetString("Str_Header_DiscordBot");
         }
-         else if (_currentPage == TelegramBotContent)
-        {
-             PageTitle.Text = GetString("Str_TelegramBot");
-             PageDescription.Text = GetString("Str_Header_TelegramBot");
-        }
-        else if (_currentPage == DiscordQuestsContent)
-        {
-             PageTitle.Text = GetString("Str_DiscordQuests");
-             PageDescription.Text = GetString("Str_Header_DiscordQuests");
-        }
-        else if (_currentPage == ProcessManagerContent)
-        {
+                  else if (_currentPage == TelegramBotContent)
+                  {
+                       PageTitle.Text = GetString("Str_TelegramBot");
+                       PageDescription.Text = GetString("Str_Header_TelegramBot");
+                  }
+                  else if (_currentPage == ProcessManagerContent)        {
              PageTitle.Text = GetString("Str_ProcessManager");
              PageDescription.Text = GetString("Str_Header_ProcessManager");
         }
@@ -366,7 +357,6 @@ public partial class MainWindow : Window
         { "Str_DiscordBot", "Discord Bot" },
         { "Str_TelegramBot", "Telegram Bot" },
         { "Str_ProcessManager", "Process Manager" },
-        { "Str_DiscordQuests", "Discord Quests" },
         { "Str_Settings", "Settings" },
 
         // Headers
@@ -374,28 +364,8 @@ public partial class MainWindow : Window
         { "Str_Header_RichPresence", "Configure Discord Presence" },
         { "Str_Header_DiscordBot", "Load and Manage Bots" },
         { "Str_Header_TelegramBot", "Load and Manage Bots" },
-        { "Str_Header_DiscordQuests", "Complete Discord Quests automatically" },
         { "Str_Header_ProcessManager", "Monitor and Control Processes" },
         { "Str_Header_Settings", "Customize Application Behavior" },
-
-        // Discord Quests
-        { "Str_DiscordToken", "Discord Token (User)" },
-        { "WM_TokenUser", "Paste your user token..." },
-        { "Str_FetchQuests", "Fetch Quests" },
-        { "Str_QuestName", "Quest Name" },
-        { "Str_QuestType", "Type" },
-        { "Str_QuestProgress", "Progress" },
-        { "Str_QuestStatus", "Status" },
-        { "Str_StartQuests", "Start Spoofing" },
-        { "Str_StopQuests", "Stop Spoofing" },
-        { "Str_NoQuests", "No uncompleted quests found." },
-        { "Status_FetchingQuests", "Fetching Discord Quests..." },
-        { "Status_QuestsFetched", "Fetched {0} quests." },
-        { "Status_QuestsRunning", "Spoofing quests in background..." },
-        { "Status_QuestsStopped", "Quest spoofing stopped." },
-        { "Status_TokenRequired", "Discord token is required!" },
-        { "Status_QuestCompleted", "Quest {0} completed!" },
-        { "Status_QuestProgressUpdate", "{0}: {1}/{2}" },
 
         // Dashboard
         { "Str_Checking", "Checking..." },
@@ -542,7 +512,6 @@ public partial class MainWindow : Window
         { "Str_DiscordBot", "Bot Discord" },
         { "Str_TelegramBot", "Bot Telegram" },
         { "Str_ProcessManager", "Gestione Processi" },
-        { "Str_DiscordQuests", "Quest Discord" },
         { "Str_Settings", "Impostazioni" },
 
         // Headers
@@ -550,28 +519,8 @@ public partial class MainWindow : Window
         { "Str_Header_RichPresence", "Configura la Presenza su Discord" },
         { "Str_Header_DiscordBot", "Carica e Gestisci Bot" },
         { "Str_Header_TelegramBot", "Carica e Gestisci Bot" },
-        { "Str_Header_DiscordQuests", "Completa le Quest di Discord automaticamente" },
         { "Str_Header_ProcessManager", "Monitora e Controlla Processi" },
         { "Str_Header_Settings", "Personalizza Comportamento Applicazione" },
-
-        // Discord Quests
-        { "Str_DiscordToken", "Token Discord (Utente)" },
-        { "WM_TokenUser", "Incolla il tuo token utente..." },
-        { "Str_FetchQuests", "Recupera Quest" },
-        { "Str_QuestName", "Nome Quest" },
-        { "Str_QuestType", "Tipo" },
-        { "Str_QuestProgress", "Progresso" },
-        { "Str_QuestStatus", "Stato" },
-        { "Str_StartQuests", "Avvia Spoofing" },
-        { "Str_StopQuests", "Ferma Spoofing" },
-        { "Str_NoQuests", "Nessuna quest incompleta trovata." },
-        { "Status_FetchingQuests", "Recuperando Quest Discord..." },
-        { "Status_QuestsFetched", "Recuperate {0} quest." },
-        { "Status_QuestsRunning", "Spoofing delle quest in corso..." },
-        { "Status_QuestsStopped", "Spoofing delle quest interrotto." },
-        { "Status_TokenRequired", "Token Discord richiesto!" },
-        { "Status_QuestCompleted", "Quest {0} completata!" },
-        { "Status_QuestProgressUpdate", "{0}: {1}/{2}" },
 
         // Dashboard
         { "Str_Checking", "Controllo in corso..." },
@@ -753,13 +702,10 @@ public partial class MainWindow : Window
         config.AppId = AppIdBox?.Text ?? "";
         config.Details = DetailsBox?.Text ?? "";
         config.State = StateBox?.Text ?? "";
-        config.ShowTimestamp = TimestampCheck?.IsChecked ?? false;
-        config.ActivityType = ActivityTypeSelector?.SelectedIndex ?? 0;
+                config.ShowTimestamp = TimestampCheck?.IsChecked ?? false;
+                config.ActivityType = ActivityTypeSelector?.SelectedIndex ?? 0;
         
-        config.DiscordToken = DiscordUserTokenBox?.Text ?? "";
-
-        config.LargeImageKey = LargeImageKeyBox?.Text ?? "";
-        config.LargeImageText = LargeImageTextBox?.Text ?? "";
+                config.LargeImageKey = LargeImageKeyBox?.Text ?? "";        config.LargeImageText = LargeImageTextBox?.Text ?? "";
         config.SmallImageKey = SmallImageKeyBox?.Text ?? "";
         config.SmallImageText = SmallImageTextBox?.Text ?? "";
         
@@ -865,12 +811,6 @@ public partial class MainWindow : Window
         ShowPage(TelegramBotContent, GetString("Str_TelegramBot"), GetString("Str_Header_TelegramBot"));
     }
 
-    private void NavigateToDiscordQuests(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
-    {
-        if (sender is Button btn) _ = AnimationHelper.PressAnimation(btn);
-        ShowPage(DiscordQuestsContent, GetString("Str_DiscordQuests"), GetString("Str_Header_DiscordQuests"));
-    }
-
     private void NavigateToProcessManager(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
     {
         if (sender is Button btn) _ = AnimationHelper.PressAnimation(btn);
@@ -903,7 +843,7 @@ public partial class MainWindow : Window
         {
             var config = new Firebase.Auth.FirebaseAuthConfig
             {
-                ApiKey = "AIzaSyArh4DfrUdmdVDdSfn_z5rtBW0-wnzLphA",
+                ApiKey = Secrets.FirebaseApiKey,
                 AuthDomain = "discordmultitool.firebaseapp.com",
                 Providers = new Firebase.Auth.Providers.FirebaseAuthProvider[]
                 {
@@ -939,7 +879,7 @@ public partial class MainWindow : Window
         {
             var config = new Firebase.Auth.FirebaseAuthConfig
             {
-                ApiKey = "AIzaSyArh4DfrUdmdVDdSfn_z5rtBW0-wnzLphA",
+                ApiKey = Secrets.FirebaseApiKey,
                 AuthDomain = "discordmultitool.firebaseapp.com",
                 Providers = new Firebase.Auth.Providers.FirebaseAuthProvider[]
                 {
@@ -973,19 +913,12 @@ public partial class MainWindow : Window
 
         try
         {
-            string clientId = "";
-            string clientSecret = "";
-
-            try
+            string clientId = Secrets.GoogleClientId;
+            string clientSecret = Secrets.GoogleClientSecret;
+            
+            if (clientId == "YOUR_GOOGLE_CLIENT_ID" || clientSecret == "YOUR_GOOGLE_CLIENT_SECRET")
             {
-                var secretJson = System.IO.File.ReadAllText("secrets.json");
-                var jsonDoc = System.Text.Json.JsonDocument.Parse(secretJson);
-                clientId = jsonDoc.RootElement.GetProperty("GoogleClientId").GetString() ?? "";
-                clientSecret = jsonDoc.RootElement.GetProperty("GoogleClientSecret").GetString() ?? "";
-            }
-            catch
-            {
-                LoginStatusText.Text = "Error: missing or invalid secrets.json";
+                LoginStatusText.Text = "Error: Google Client ID or Secret not configured. Set GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET environment variables.";
                 LoginStatusText.Foreground = Avalonia.Media.Brushes.IndianRed;
                 return;
             }
@@ -1018,7 +951,7 @@ public partial class MainWindow : Window
             using var httpClient = new HttpClient();
             var jsonPayload = JsonSerializer.Serialize(requestPayload);
             var content = new StringContent(jsonPayload, System.Text.Encoding.UTF8, "application/json");
-            var response = await httpClient.PostAsync($"https://identitytoolkit.googleapis.com/v1/accounts:signInWithIdp?key=AIzaSyArh4DfrUdmdVDdSfn_z5rtBW0-wnzLphA", content);
+            var response = await httpClient.PostAsync($"https://identitytoolkit.googleapis.com/v1/accounts:signInWithIdp?key={Secrets.FirebaseApiKey}", content);
             
             if (response.IsSuccessStatusCode)
             {
@@ -1378,7 +1311,7 @@ public partial class MainWindow : Window
             {
                 rp.Party = new Party()
                 {
-                    ID = Secrets.CreateFriendlySecret(new Random()),
+                    ID = DiscordRPC.Secrets.CreateFriendlySecret(new Random()),
                     Size = size,
                     Max = max
                 };
@@ -1685,237 +1618,6 @@ public partial class MainWindow : Window
         _overlayWindow.UpdateFunctionStates(_discordBotActive, _telegramBotActive, rpcActive, _textColor);
     }
 
-    // --- Discord Quests Logic ---
-    private CancellationTokenSource? _questsCts;
-    private List<DiscordQuestItem> _questItems = new();
-
-    public class DiscordQuestItem
-    {
-        public string Id { get; set; } = "";
-        public string QuestName { get; set; } = "";
-        public string TaskName { get; set; } = "";
-        public int Target { get; set; }
-        public int Value { get; set; }
-        public string Status { get; set; } = "Pending";
-        public IBrush StatusColor { get; set; } = Brushes.Gray;
-        public string ProgressText => $"{Value}/{Target}";
-        
-        // Internal data
-        public string? StreamKey { get; set; }
-    }
-
-    private async void FetchQuests_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
-    {
-        if (sender is Button btn) _ = AnimationHelper.PressAnimation(btn);
-
-        string token = DiscordUserTokenBox?.Text ?? "";
-        if (string.IsNullOrWhiteSpace(token))
-        {
-            StatusBar.Text = GetString("Status_TokenRequired");
-            return;
-        }
-
-        StatusBar.Text = GetString("Status_FetchingQuests");
-        try
-        {
-            using var client = new HttpClient();
-            client.DefaultRequestHeaders.Add("Authorization", token);
-            client.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36");
-            client.DefaultRequestHeaders.Add("Accept", "*/*");
-            client.DefaultRequestHeaders.Add("Accept-Language", "en-US,en;q=0.9");
-            client.DefaultRequestHeaders.Add("Origin", "https://discord.com");
-            client.DefaultRequestHeaders.Add("Referer", "https://discord.com/channels/@me");
-            client.DefaultRequestHeaders.Add("Sec-Fetch-Dest", "empty");
-            client.DefaultRequestHeaders.Add("Sec-Fetch-Mode", "cors");
-            client.DefaultRequestHeaders.Add("Sec-Fetch-Site", "same-origin");
-
-            var response = await client.GetAsync("https://discord.com/api/v9/users/@me/quests");
-            
-            var json = await response.Content.ReadAsStringAsync();
-            if (!response.IsSuccessStatusCode)
-            {
-                // Discord error messages usually come as {"message": "401: Unauthorized", "code": 0}
-                StatusBar.Text = $"Error: {response.StatusCode} - {json}";
-                return;
-            }
-
-            using var doc = JsonDocument.Parse(json);
-            
-            _questItems.Clear();
-            foreach (var quest in doc.RootElement.GetProperty("quests").EnumerateArray())
-            {
-                var userStatus = quest.GetProperty("user_status");
-                if (userStatus.TryGetProperty("completed_at", out var completedAt) && !string.IsNullOrEmpty(completedAt.GetString()))
-                    continue;
-
-                var config = quest.GetProperty("config");
-                var questName = config.GetProperty("messages").GetProperty("quest_name").GetString() ?? "Unknown";
-                
-                // Determine task
-                var taskConfig = config.TryGetProperty("task_config_v2", out var tc2) ? tc2 : config.GetProperty("task_config");
-                var tasks = taskConfig.GetProperty("tasks");
-                
-                string taskName = "";
-                int target = 0;
-                int value = 0;
-
-                foreach (var task in tasks.EnumerateObject())
-                {
-                    taskName = task.Name;
-                    target = task.Value.GetProperty("target").GetInt32();
-                    
-                    if (userStatus.TryGetProperty("progress", out var progress) && progress.TryGetProperty(taskName, out var pValue))
-                    {
-                        value = pValue.GetProperty("value").GetInt32();
-                    }
-                    break; // Just take the first one for now
-                }
-
-                _questItems.Add(new DiscordQuestItem
-                {
-                    Id = quest.GetProperty("id").GetString() ?? "",
-                    QuestName = questName,
-                    TaskName = taskName,
-                    Target = target,
-                    Value = value,
-                    Status = value >= target ? "Completed" : "Available",
-                    StatusColor = value >= target ? Brushes.Green : Brushes.Orange
-                });
-            }
-
-            QuestsListBox.ItemsSource = null;
-            QuestsListBox.ItemsSource = _questItems;
-            StatusBar.Text = string.Format(GetString("Status_QuestsFetched"), _questItems.Count);
-        }
-        catch (Exception ex)
-        {
-            StatusBar.Text = $"Error: {ex.Message}";
-        }
-    }
-
-    private void StartQuests_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
-    {
-        if (sender is Button btn) _ = AnimationHelper.PressAnimation(btn);
-
-        string token = DiscordUserTokenBox?.Text ?? "";
-        if (string.IsNullOrWhiteSpace(token))
-        {
-            StatusBar.Text = GetString("Status_TokenRequired");
-            return;
-        }
-
-        if (_questsCts != null) return;
-
-        // Manual button state management
-        var startBtn = this.FindControl<Button>("StartQuestsBtn");
-        var stopBtn = this.FindControl<Button>("StopQuestsBtn");
-        if (startBtn != null) startBtn.IsEnabled = false;
-        if (stopBtn != null) stopBtn.IsEnabled = true;
-
-        _questsCts = new CancellationTokenSource();
-        _ = RunQuestsLoop(_questsCts.Token, token);
-        
-        StatusBar.Text = GetString("Status_QuestsRunning");
-    }
-
-    private void StopQuests_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
-    {
-        if (sender is Button btn) _ = AnimationHelper.PressAnimation(btn);
-
-        _questsCts?.Cancel();
-        _questsCts = null;
-        
-        var startBtn = this.FindControl<Button>("StartQuestsBtn");
-        var stopBtn = this.FindControl<Button>("StopQuestsBtn");
-        if (startBtn != null) startBtn.IsEnabled = true;
-        if (stopBtn != null) stopBtn.IsEnabled = false;
-
-        StatusBar.Text = GetString("Status_QuestsStopped");
-    }
-
-    private async Task RunQuestsLoop(CancellationToken ct, string token)
-    {
-        while (!ct.IsCancellationRequested)
-        {
-            var activeQuests = _questItems.Where(q => q.Value < q.Target).ToList();
-            if (!activeQuests.Any())
-            {
-                await Avalonia.Threading.Dispatcher.UIThread.InvokeAsync(() => StopQuests_Click(null, new Avalonia.Interactivity.RoutedEventArgs()));
-                break;
-            }
-
-            foreach (var quest in activeQuests)
-            {
-                try
-                {
-                    using var client = new HttpClient();
-                    client.DefaultRequestHeaders.Clear();
-                    client.DefaultRequestHeaders.Add("Authorization", token);
-
-                    if (quest.TaskName == "WATCH_VIDEO" || quest.TaskName == "WATCH_VIDEO_ON_MOBILE")
-                    {
-                        // Spoof video progress
-                        int nextValue = Math.Min(quest.Target, quest.Value + 10);
-                        var body = new { timestamp = (double)nextValue };
-                        var content = new StringContent(JsonSerializer.Serialize(body), System.Text.Encoding.UTF8, "application/json");
-                        var resp = await client.PostAsync($"https://discord.com/api/v9/quests/{quest.Id}/video-progress", content);
-                        
-                        if (resp.IsSuccessStatusCode)
-                        {
-                            quest.Value = nextValue;
-                            if (quest.Value >= quest.Target)
-                            {
-                                quest.Status = "Completed";
-                                quest.StatusColor = Brushes.Green;
-                                StatusBar.Text = string.Format(GetString("Status_QuestCompleted"), quest.QuestName);
-                            }
-                        }
-                    }
-                    else if (quest.TaskName == "PLAY_ACTIVITY" || quest.TaskName == "PLAY_ON_DESKTOP" || quest.TaskName == "STREAM_ON_DESKTOP")
-                    {
-                        // For these, we send heartbeats.
-                        // For heartbeats to work without actually being in the game/VC, 
-                        // sometimes just sending the heartbeat with ANY stream_key (for PLAY_ACTIVITY) or application_id works.
-                        
-                        var body = new { terminal = false };
-                        var content = new StringContent(JsonSerializer.Serialize(body), System.Text.Encoding.UTF8, "application/json");
-                        var resp = await client.PostAsync($"https://discord.com/api/v9/quests/{quest.Id}/heartbeat", content);
-                        
-                        if (resp.IsSuccessStatusCode)
-                        {
-                            var respJson = await resp.Content.ReadAsStringAsync();
-                            using var respDoc = JsonDocument.Parse(respJson);
-                            if (respDoc.RootElement.TryGetProperty("progress", out var progress))
-                            {
-                                if (progress.TryGetProperty(quest.TaskName, out var taskProg))
-                                {
-                                    quest.Value = taskProg.GetProperty("value").GetInt32();
-                                    if (quest.Value >= quest.Target)
-                                    {
-                                        quest.Status = "Completed";
-                                        quest.StatusColor = Brushes.Green;
-                                        // Send terminal heartbeat
-                                        var terminalBody = new { terminal = true };
-                                        await client.PostAsync($"https://discord.com/api/v9/quests/{quest.Id}/heartbeat", 
-                                            new StringContent(JsonSerializer.Serialize(terminalBody), System.Text.Encoding.UTF8, "application/json"));
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    
-                    await Avalonia.Threading.Dispatcher.UIThread.InvokeAsync(() => {
-                        QuestsListBox.Refresh();
-                    });
-                }
-                catch { }
-                
-                if (ct.IsCancellationRequested) break;
-            }
-
-            try { await Task.Delay(20000, ct); } catch { break; }
-        }
-    }
     private async Task LoadCloudConfig()
     {
         if (string.IsNullOrEmpty(_currentUserToken) || string.IsNullOrEmpty(_currentUserId)) return;

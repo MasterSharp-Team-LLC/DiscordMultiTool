@@ -30,7 +30,6 @@
               <Button Content="{DynamicResource Str_RichPresence}" Click="NavigateToRichPresence" Classes="SidebarButton" HorizontalAlignment="Stretch" />
               <Button Content="{DynamicResource Str_DiscordBot}" Click="NavigateToDiscordBot" Classes="SidebarButton" HorizontalAlignment="Stretch" />
               <Button Content="{DynamicResource Str_TelegramBot}" Click="NavigateToTelegramBot" Classes="SidebarButton" HorizontalAlignment="Stretch" />
-              <Button Content="{DynamicResource Str_DiscordQuests}" Click="NavigateToDiscordQuests" Classes="SidebarButton" HorizontalAlignment="Stretch" />
               <Button Content="{DynamicResource Str_ProcessManager}" Click="NavigateToProcessManager" Classes="SidebarButton" HorizontalAlignment="Stretch" />
               <Separator Background="{DynamicResource BorderBrush}" Height="1" Margin="8,12" />
               <Button Content="{DynamicResource Str_Settings}" Click="NavigateToSettings" Classes="SidebarButton" HorizontalAlignment="Stretch" />
@@ -251,50 +250,6 @@
                     </StackPanel>
                     <Button Content="{DynamicResource Str_LaunchBot}" Classes="AnimatedButton" HorizontalAlignment="Left" Padding="24,10" />
                   </StackPanel>
-                </Border>
-              </StackPanel>
-
-              <!-- Discord Quests -->
-              <StackPanel x:Name="DiscordQuestsContent" IsVisible="False" Classes="ContentPage">
-                <Border Classes="AnimatedCard" Margin="0,0,0,16">
-                  <StackPanel Spacing="16">
-                    <TextBlock Text="{DynamicResource Str_DiscordToken}" Foreground="{DynamicResource ForegroundColor}" FontSize="16" FontWeight="SemiBold" />
-                    <Grid ColumnDefinitions="*,Auto">
-                      <TextBox x:Name="DiscordUserTokenBox" Watermark="{DynamicResource WM_TokenUser}" Classes="ModernBox" PasswordChar="•" />
-                      <Button Grid.Column="1" Content="{DynamicResource Str_FetchQuests}" Click="FetchQuests_Click" Classes="AnimatedButton" Margin="12,0,0,0" />
-                    </Grid>
-                  </StackPanel>
-                </Border>
-
-                <Border Classes="AnimatedCard" Padding="0">
-                  <Grid RowDefinitions="Auto,*,Auto">
-                    <Border Grid.Row="0" Padding="12" Background="{DynamicResource SurfaceColor}">
-                      <Grid ColumnDefinitions="2*,*,*,*">
-                        <TextBlock Text="{DynamicResource Str_QuestName}" FontWeight="Bold" Foreground="{DynamicResource TextColor}" />
-                        <TextBlock Grid.Column="1" Text="{DynamicResource Str_QuestType}" FontWeight="Bold" Foreground="{DynamicResource TextColor}" />
-                        <TextBlock Grid.Column="2" Text="{DynamicResource Str_QuestProgress}" FontWeight="Bold" Foreground="{DynamicResource TextColor}" />
-                        <TextBlock Grid.Column="3" Text="{DynamicResource Str_QuestStatus}" FontWeight="Bold" Foreground="{DynamicResource TextColor}" />
-                      </Grid>
-                    </Border>
-                    <ListBox x:Name="QuestsListBox" Grid.Row="1" Height="300" Background="Transparent" BorderThickness="0">
-                      <ListBox.ItemTemplate>
-                        <DataTemplate>
-                          <Grid ColumnDefinitions="2*,*,*,*">
-                            <TextBlock Text="{Binding QuestName}" VerticalAlignment="Center" />
-                            <TextBlock Grid.Column="1" Text="{Binding TaskName}" VerticalAlignment="Center" />
-                            <TextBlock Grid.Column="2" Text="{Binding ProgressText}" VerticalAlignment="Center" />
-                            <TextBlock Grid.Column="3" Text="{Binding Status}" Foreground="{Binding StatusColor}" VerticalAlignment="Center" />
-                          </Grid>
-                        </DataTemplate>
-                      </ListBox.ItemTemplate>
-                    </ListBox>
-                    <Border Grid.Row="2" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="0,1,0,0" Padding="12">
-                      <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="12">
-                         <Button x:Name="StopQuestsBtn" Content="{DynamicResource Str_StopQuests}" Click="StopQuests_Click" Classes="AnimatedButton" Background="#7f1d1d" Foreground="#fca5a5" IsEnabled="False" />
-                         <Button x:Name="StartQuestsBtn" Content="{DynamicResource Str_StartQuests}" Click="StartQuests_Click" Classes="AnimatedButton" IsEnabled="True" />
-                      </StackPanel>
-                    </Border>
-                  </Grid>
                 </Border>
               </StackPanel>
 
