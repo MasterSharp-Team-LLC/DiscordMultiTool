@@ -45,7 +45,7 @@ Grazie del supporto per questo programma! Se desiderate una nuova versione o ave
 
 ---
 
-📌 **Repository:** [https://github.com/CodeSharp3210](https://github.com/CodeSharp3210)
+📌 **Repository:** [https://github.com/CodeSharp3210](https://github.com/MasterSharp-Team-LLC/DiscordMultiTool)
 
 
 
