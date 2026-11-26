@@ -32,23 +32,23 @@ public partial class OverlayWindow : Window
     private StackPanel? _functionContainer;
 
     // Reusable mutable brushes — zero per-frame allocations during Rainbow Mode
-    private readonly SolidColorBrush _bgBrush = new(Color.Parse("#BF0f172a"));
-    private readonly SolidColorBrush _borderBrush = new(Color.Parse("#334155"));
+    private readonly SolidColorBrush _bgBrush = new(Color.Parse("#D90B0D13"));
+    private readonly SolidColorBrush _borderBrush = new(Color.Parse("#323B54"));
     private readonly SolidColorBrush _textBrush = new(Colors.White);
     private readonly SolidColorBrush _rainbowTextBrush = new(Colors.White);
-    private readonly SolidColorBrush _inactiveBrush = new(Color.Parse("#64748b"));
+    private readonly SolidColorBrush _inactiveBrush = new(Color.Parse("#5E6778"));
 
     private CancellationTokenSource? _hoverCts;
     private DispatcherTimer? _rainbowTimer;
     private bool _rainbowMode;
-    private double _bgOpacity = 0.75;
+    private double _bgOpacity = 0.82;
     private double _hue;
 
     private readonly List<FunctionState> _functions = new();
     private Color _userTextColor = Colors.White;
 
-    private const double ActiveFontSize = 19;
-    private const double InactiveFontSize = 14;
+    private const double ActiveFontSize = 15.5;
+    private const double InactiveFontSize = 12.5;
 
     public OverlayWindow()
     {
@@ -133,7 +133,7 @@ public partial class OverlayWindow : Window
             StopRainbow();
             _bgBrush.Color = Color.FromArgb((byte)(bgOpacity * 255), bg.R, bg.G, bg.B);
             if (_titleText != null) _titleText.Foreground = _textBrush;
-            if (_versionText != null) _versionText.Foreground = _textBrush;
+            if (_versionText != null) _versionText.Foreground = _inactiveBrush;
             foreach (var func in _functions)
             {
                 if (func.IsActive && func.TextBlock != null)
@@ -171,11 +171,11 @@ public partial class OverlayWindow : Window
     {
         _hue = (_hue + 1.0) % 360.0;
 
-        var bgColor = HslToRgb(_hue, 0.8, 0.5);
+        var bgColor = HslToRgb(_hue, 0.78, 0.22);
         _bgBrush.Color = Color.FromArgb((byte)(_bgOpacity * 255), bgColor.R, bgColor.G, bgColor.B);
 
-        double textHue = (_hue + 180.0) % 360.0;
-        _rainbowTextBrush.Color = HslToRgb(textHue, 1.0, 0.6);
+        double textHue = (_hue + 160.0) % 360.0;
+        _rainbowTextBrush.Color = HslToRgb(textHue, 0.95, 0.72);
     }
 
     private void StopRainbow()
@@ -202,7 +202,10 @@ public partial class OverlayWindow : Window
 
     private void OnPointerPressed(object? sender, PointerPressedEventArgs e)
     {
-        BeginMoveDrag(e);
+        if (e.GetCurrentPoint(this).Properties.IsLeftButtonPressed)
+        {
+            BeginMoveDrag(e);
+        }
     }
 
     private void OnWindowPointerEnter(object? sender, PointerEventArgs e)
@@ -221,7 +224,7 @@ public partial class OverlayWindow : Window
 
         try
         {
-            await Task.Delay(2000, token);
+            await Task.Delay(1800, token);
             if (_closeButton != null)
                 _closeButton.Opacity = 0;
         }
@@ -283,14 +286,15 @@ public partial class OverlayWindow : Window
         string status = GetString(statusKey);
         string functionName = string.IsNullOrEmpty(state.ResourceKey) ? state.Name : GetString(state.ResourceKey);
 
-        state.TextBlock.Text = $"{functionName}: {status}";
         if (state.IsActive)
         {
+            state.TextBlock.Text = $"●  {functionName} · {status}";
             state.TextBlock.FontSize = ActiveFontSize;
             state.TextBlock.Foreground = _rainbowMode ? _rainbowTextBrush : _textBrush;
         }
         else
         {
+            state.TextBlock.Text = $"○  {functionName} · {status}";
             state.TextBlock.FontSize = InactiveFontSize;
             state.TextBlock.Foreground = _inactiveBrush;
         }

@@ -4,86 +4,254 @@
              RequestedThemeVariant="Dark">
 
   <Application.Resources>
-    <!-- Unified Modern Dark Palette (Slate / Violet) -->
-    <Color x:Key="BackgroundColor">#0F172A</Color>
-    <Color x:Key="SurfaceColor">#1E293B</Color>
-    <Color x:Key="SurfaceHoverColor">#283548</Color>
-    <Color x:Key="AccentColor">#8B5CF6</Color>
-    <Color x:Key="AccentHoverColor">#7C3AED</Color>
-    <Color x:Key="ForegroundColor">#F8FAFC</Color>
-    <Color x:Key="TextColor">#94A3B8</Color>
-    <Color x:Key="BorderColor">#334155</Color>
+    <!-- Onyx + Discord Blurple Design System -->
+    <Color x:Key="BackgroundColor">#0B0D13</Color>
+    <Color x:Key="SidebarColor">#0E1118</Color>
+    <Color x:Key="SurfaceColor">#141824</Color>
+    <Color x:Key="SurfaceElevatedColor">#1B2030</Color>
+    <Color x:Key="SurfaceHoverColor">#23293D</Color>
+
+    <Color x:Key="AccentColor">#5865F2</Color>
+    <Color x:Key="AccentHoverColor">#6D78F9</Color>
+    <Color x:Key="AccentPressedColor">#4752C4</Color>
+    <Color x:Key="AccentSoftColor">#245865F2</Color>
+
+    <Color x:Key="SuccessColor">#23A55A</Color>
+    <Color x:Key="SuccessSoftColor">#2223A55A</Color>
+    <Color x:Key="DangerColor">#F23F43</Color>
+    <Color x:Key="DangerSoftColor">#24F23F43</Color>
+    <Color x:Key="TelegramColor">#2AABEE</Color>
+    <Color x:Key="TelegramSoftColor">#222AABEE</Color>
+
+    <Color x:Key="ForegroundColor">#F2F4F8</Color>
+    <Color x:Key="TextColor">#949BA4</Color>
+    <Color x:Key="TextMutedColor">#5E6778</Color>
+    <Color x:Key="BorderColor">#22283A</Color>
+    <Color x:Key="BorderStrongColor">#323B54</Color>
 
     <SolidColorBrush x:Key="BackgroundBrush" Color="{StaticResource BackgroundColor}" />
+    <SolidColorBrush x:Key="SidebarBrush" Color="{StaticResource SidebarColor}" />
     <SolidColorBrush x:Key="SurfaceBrush" Color="{StaticResource SurfaceColor}" />
+    <SolidColorBrush x:Key="SurfaceElevatedBrush" Color="{StaticResource SurfaceElevatedColor}" />
     <SolidColorBrush x:Key="SurfaceHoverBrush" Color="{StaticResource SurfaceHoverColor}" />
+
+    <SolidColorBrush x:Key="AccentBrush" Color="{StaticResource AccentColor}" />
+    <SolidColorBrush x:Key="AccentHoverBrush" Color="{StaticResource AccentHoverColor}" />
+    <SolidColorBrush x:Key="AccentPressedBrush" Color="{StaticResource AccentPressedColor}" />
+    <SolidColorBrush x:Key="AccentSoftBrush" Color="{StaticResource AccentSoftColor}" />
+
+    <SolidColorBrush x:Key="SuccessBrush" Color="{StaticResource SuccessColor}" />
+    <SolidColorBrush x:Key="SuccessSoftBrush" Color="{StaticResource SuccessSoftColor}" />
+    <SolidColorBrush x:Key="DangerBrush" Color="{StaticResource DangerColor}" />
+    <SolidColorBrush x:Key="DangerSoftBrush" Color="{StaticResource DangerSoftColor}" />
+    <SolidColorBrush x:Key="TelegramBrush" Color="{StaticResource TelegramColor}" />
+    <SolidColorBrush x:Key="TelegramSoftBrush" Color="{StaticResource TelegramSoftColor}" />
+
     <SolidColorBrush x:Key="ForegroundBrush" Color="{StaticResource ForegroundColor}" />
     <SolidColorBrush x:Key="TextBrush" Color="{StaticResource TextColor}" />
-    <SolidColorBrush x:Key="AccentBrush" Color="{StaticResource AccentColor}" />
+    <SolidColorBrush x:Key="TextMutedBrush" Color="{StaticResource TextMutedColor}" />
     <SolidColorBrush x:Key="BorderBrush" Color="{StaticResource BorderColor}" />
+    <SolidColorBrush x:Key="BorderStrongBrush" Color="{StaticResource BorderStrongColor}" />
+
+    <FontFamily x:Key="SansFont">Inter, Segoe UI Variable Display, Segoe UI, sans-serif</FontFamily>
+    <FontFamily x:Key="MonoFont">Cascadia Code, JetBrains Mono, Consolas, monospace</FontFamily>
   </Application.Resources>
 
   <Application.Styles>
     <FluentTheme />
 
-    <!-- Modern Sidebar Button -->
+    <!-- Global Typography -->
+    <Style Selector="Window">
+      <Setter Property="FontFamily" Value="{StaticResource SansFont}" />
+      <Setter Property="Foreground" Value="{DynamicResource ForegroundBrush}" />
+    </Style>
+
+    <!-- Sidebar Navigation Item -->
     <Style Selector="Button.SidebarButton">
       <Setter Property="Background" Value="Transparent" />
       <Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
-      <Setter Property="BorderThickness" Value="0" />
-      <Setter Property="HorizontalContentAlignment" Value="Left" />
-      <Setter Property="Padding" Value="16,12" />
+      <Setter Property="BorderBrush" Value="Transparent" />
+      <Setter Property="BorderThickness" Value="1" />
+      <Setter Property="HorizontalAlignment" Value="Stretch" />
+      <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+      <Setter Property="Padding" Value="12,9" />
       <Setter Property="CornerRadius" Value="8" />
-      <Setter Property="FontSize" Value="14" />
+      <Setter Property="FontSize" Value="13.5" />
       <Setter Property="FontWeight" Value="Medium" />
-      <Setter Property="Margin" Value="0,2" />
+      <Setter Property="Cursor" Value="Hand" />
       <Setter Property="Transitions">
         <Transitions>
-          <BrushTransition Property="Background" Duration="0:0:0.15" />
-          <BrushTransition Property="Foreground" Duration="0:0:0.15" />
+          <BrushTransition Property="Background" Duration="0:0:0.14" />
+          <BrushTransition Property="Foreground" Duration="0:0:0.14" />
+          <BrushTransition Property="BorderBrush" Duration="0:0:0.14" />
         </Transitions>
       </Setter>
     </Style>
     <Style Selector="Button.SidebarButton:pointerover /template/ ContentPresenter#PART_ContentPresenter">
-      <Setter Property="Background" Value="{DynamicResource SurfaceHoverBrush}" />
+      <Setter Property="Background" Value="{DynamicResource SurfaceElevatedBrush}" />
       <Setter Property="Foreground" Value="{DynamicResource ForegroundBrush}" />
     </Style>
-
-    <!-- Modern Action Button -->
-    <Style Selector="Button.AnimatedButton">
-      <Setter Property="Background" Value="{DynamicResource SurfaceBrush}" />
+    <Style Selector="Button.SidebarButton.Active">
+      <Setter Property="Background" Value="{DynamicResource AccentSoftBrush}" />
       <Setter Property="Foreground" Value="{DynamicResource ForegroundBrush}" />
-      <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}" />
+      <Setter Property="BorderBrush" Value="#405865F2" />
+      <Setter Property="FontWeight" Value="SemiBold" />
+    </Style>
+    <Style Selector="Button.SidebarButton.Active /template/ ContentPresenter#PART_ContentPresenter">
+      <Setter Property="Background" Value="{DynamicResource AccentSoftBrush}" />
+      <Setter Property="Foreground" Value="{DynamicResource ForegroundBrush}" />
+      <Setter Property="BorderBrush" Value="#405865F2" />
+    </Style>
+
+    <!-- Secondary / Default Action Button -->
+    <Style Selector="Button.AnimatedButton">
+      <Setter Property="Background" Value="{DynamicResource SurfaceElevatedBrush}" />
+      <Setter Property="Foreground" Value="{DynamicResource ForegroundBrush}" />
+      <Setter Property="BorderBrush" Value="{DynamicResource BorderStrongBrush}" />
       <Setter Property="BorderThickness" Value="1" />
-      <Setter Property="CornerRadius" Value="6" />
-      <Setter Property="Padding" Value="16,10" />
+      <Setter Property="CornerRadius" Value="8" />
+      <Setter Property="Padding" Value="14,8" />
+      <Setter Property="FontSize" Value="13" />
+      <Setter Property="FontWeight" Value="SemiBold" />
+      <Setter Property="Cursor" Value="Hand" />
       <Setter Property="HorizontalContentAlignment" Value="Center" />
       <Setter Property="VerticalContentAlignment" Value="Center" />
       <Setter Property="Transitions">
         <Transitions>
-          <BrushTransition Property="Background" Duration="0:0:0.15" />
+          <BrushTransition Property="Background" Duration="0:0:0.14" />
+          <BrushTransition Property="BorderBrush" Duration="0:0:0.14" />
           <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.1" />
         </Transitions>
       </Setter>
     </Style>
     <Style Selector="Button.AnimatedButton:pointerover /template/ ContentPresenter#PART_ContentPresenter">
       <Setter Property="Background" Value="{DynamicResource SurfaceHoverBrush}" />
-    </Style>
-    <Style Selector="Button.AnimatedButton:pointerover">
-      <Setter Property="RenderTransform" Value="scale(1.01)" />
+      <Setter Property="BorderBrush" Value="#475375" />
     </Style>
     <Style Selector="Button.AnimatedButton:pressed">
       <Setter Property="RenderTransform" Value="scale(0.98)" />
     </Style>
 
-    <!-- Modern Card -->
+    <!-- Primary Blurple Button -->
+    <Style Selector="Button.PrimaryButton">
+      <Setter Property="Background" Value="{DynamicResource AccentBrush}" />
+      <Setter Property="Foreground" Value="White" />
+      <Setter Property="BorderBrush" Value="#7983F5" />
+      <Setter Property="BorderThickness" Value="1" />
+      <Setter Property="CornerRadius" Value="8" />
+      <Setter Property="Padding" Value="16,9" />
+      <Setter Property="FontSize" Value="13" />
+      <Setter Property="FontWeight" Value="SemiBold" />
+      <Setter Property="Cursor" Value="Hand" />
+      <Setter Property="HorizontalContentAlignment" Value="Center" />
+      <Setter Property="VerticalContentAlignment" Value="Center" />
+      <Setter Property="Transitions">
+        <Transitions>
+          <BrushTransition Property="Background" Duration="0:0:0.14" />
+          <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.1" />
+        </Transitions>
+      </Setter>
+    </Style>
+    <Style Selector="Button.PrimaryButton:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+      <Setter Property="Background" Value="{DynamicResource AccentHoverBrush}" />
+      <Setter Property="Foreground" Value="White" />
+    </Style>
+    <Style Selector="Button.PrimaryButton:pressed /template/ ContentPresenter#PART_ContentPresenter">
+      <Setter Property="Background" Value="{DynamicResource AccentPressedBrush}" />
+      <Setter Property="Foreground" Value="White" />
+    </Style>
+    <Style Selector="Button.PrimaryButton:pressed">
+      <Setter Property="RenderTransform" Value="scale(0.98)" />
+    </Style>
+
+    <!-- Danger / Destructive Button -->
+    <Style Selector="Button.DangerButton">
+      <Setter Property="Background" Value="{DynamicResource DangerSoftBrush}" />
+      <Setter Property="Foreground" Value="#FF7A7D" />
+      <Setter Property="BorderBrush" Value="#55F23F43" />
+      <Setter Property="BorderThickness" Value="1" />
+      <Setter Property="CornerRadius" Value="8" />
+      <Setter Property="Padding" Value="16,9" />
+      <Setter Property="FontSize" Value="13" />
+      <Setter Property="FontWeight" Value="SemiBold" />
+      <Setter Property="Cursor" Value="Hand" />
+      <Setter Property="HorizontalContentAlignment" Value="Center" />
+      <Setter Property="VerticalContentAlignment" Value="Center" />
+      <Setter Property="Transitions">
+        <Transitions>
+          <BrushTransition Property="Background" Duration="0:0:0.14" />
+          <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.1" />
+        </Transitions>
+      </Setter>
+    </Style>
+    <Style Selector="Button.DangerButton:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+      <Setter Property="Background" Value="#3DF23F43" />
+      <Setter Property="Foreground" Value="#FFA4A6" />
+    </Style>
+    <Style Selector="Button.DangerButton:pressed">
+      <Setter Property="RenderTransform" Value="scale(0.98)" />
+    </Style>
+
+    <!-- Interactive Bento Feature Card Button -->
+    <Style Selector="Button.ModuleCardButton">
+      <Setter Property="Background" Value="{DynamicResource SurfaceBrush}" />
+      <Setter Property="Foreground" Value="{DynamicResource ForegroundBrush}" />
+      <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}" />
+      <Setter Property="BorderThickness" Value="1" />
+      <Setter Property="CornerRadius" Value="12" />
+      <Setter Property="Padding" Value="18" />
+      <Setter Property="HorizontalAlignment" Value="Stretch" />
+      <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+      <Setter Property="VerticalContentAlignment" Value="Stretch" />
+      <Setter Property="Cursor" Value="Hand" />
+      <Setter Property="Transitions">
+        <Transitions>
+          <BrushTransition Property="Background" Duration="0:0:0.16" />
+          <BrushTransition Property="BorderBrush" Duration="0:0:0.16" />
+          <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.12" />
+        </Transitions>
+      </Setter>
+    </Style>
+    <Style Selector="Button.ModuleCardButton:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+      <Setter Property="Background" Value="{DynamicResource SurfaceElevatedBrush}" />
+      <Setter Property="BorderBrush" Value="#665865F2" />
+    </Style>
+    <Style Selector="Button.ModuleCardButton:pressed">
+      <Setter Property="RenderTransform" Value="scale(0.99)" />
+    </Style>
+
+    <!-- Modern Surface Card -->
     <Style Selector="Border.AnimatedCard">
       <Setter Property="Background" Value="{DynamicResource SurfaceBrush}" />
       <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}" />
       <Setter Property="BorderThickness" Value="1" />
       <Setter Property="CornerRadius" Value="12" />
-      <Setter Property="Padding" Value="24" />
-      <Setter Property="BoxShadow" Value="0 4 6 0 #33000000" />
+      <Setter Property="Padding" Value="20" />
+    </Style>
+
+    <!-- Nested / Subtle Card -->
+    <Style Selector="Border.SubtleCard">
+      <Setter Property="Background" Value="{DynamicResource BackgroundBrush}" />
+      <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}" />
+      <Setter Property="BorderThickness" Value="1" />
+      <Setter Property="CornerRadius" Value="10" />
+      <Setter Property="Padding" Value="16" />
+    </Style>
+
+    <!-- Field Label -->
+    <Style Selector="TextBlock.FieldLabel">
+      <Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
+      <Setter Property="FontSize" Value="12" />
+      <Setter Property="FontWeight" Value="SemiBold" />
+      <Setter Property="Margin" Value="0,0,0,6" />
+    </Style>
+
+    <!-- Section Eyebrow -->
+    <Style Selector="TextBlock.Eyebrow">
+      <Setter Property="Foreground" Value="{DynamicResource TextMutedBrush}" />
+      <Setter Property="FontSize" Value="10.5" />
+      <Setter Property="FontWeight" Value="Bold" />
+      <Setter Property="LetterSpacing" Value="1" />
     </Style>
 
     <!-- Modern TextBox -->
@@ -92,20 +260,44 @@
       <Setter Property="Foreground" Value="{DynamicResource ForegroundBrush}" />
       <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}" />
       <Setter Property="BorderThickness" Value="1" />
-      <Setter Property="CornerRadius" Value="6" />
-      <Setter Property="Padding" Value="10" />
+      <Setter Property="CornerRadius" Value="8" />
+      <Setter Property="Padding" Value="11,9" />
+      <Setter Property="FontSize" Value="13" />
       <Setter Property="Transitions">
         <Transitions>
-          <BrushTransition Property="BorderBrush" Duration="0:0:0.15" />
+          <BrushTransition Property="BorderBrush" Duration="0:0:0.14" />
         </Transitions>
       </Setter>
     </Style>
     <Style Selector="TextBox.ModernBox:pointerover /template/ Border#PART_BorderElement">
-      <Setter Property="BorderBrush" Value="{DynamicResource AccentBrush}" />
+      <Setter Property="BorderBrush" Value="{DynamicResource BorderStrongBrush}" />
       <Setter Property="Background" Value="{DynamicResource BackgroundBrush}" />
     </Style>
     <Style Selector="TextBox.ModernBox:focus /template/ Border#PART_BorderElement">
       <Setter Property="BorderBrush" Value="{DynamicResource AccentBrush}" />
+      <Setter Property="Background" Value="{DynamicResource BackgroundBrush}" />
+    </Style>
+
+    <!-- ComboBox Polish -->
+    <Style Selector="ComboBox">
+      <Setter Property="Background" Value="{DynamicResource BackgroundBrush}" />
+      <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}" />
+      <Setter Property="CornerRadius" Value="8" />
+      <Setter Property="Padding" Value="11,8" />
+      <Setter Property="FontSize" Value="13" />
+    </Style>
+
+    <!-- ListBox Row Styling -->
+    <Style Selector="ListBoxItem">
+      <Setter Property="Padding" Value="12,9" />
+      <Setter Property="Margin" Value="4,2" />
+      <Setter Property="CornerRadius" Value="8" />
+    </Style>
+    <Style Selector="ListBoxItem:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+      <Setter Property="Background" Value="{DynamicResource SurfaceElevatedBrush}" />
+    </Style>
+    <Style Selector="ListBoxItem:selected /template/ ContentPresenter#PART_ContentPresenter">
+      <Setter Property="Background" Value="{DynamicResource AccentSoftBrush}" />
     </Style>
   </Application.Styles>
 

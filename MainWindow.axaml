@@ -1,554 +1,975 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:local="clr-namespace:DiscordMultiTool"
+        xmlns:models="clr-namespace:DiscordMultiTool.Models"
         x:Class="DiscordMultiTool.MainWindow"
         Title="DiscordMultiTool"
-        Width="1200"
-        Height="720"
-        MinWidth="960"
-        MinHeight="600"
+        Width="1260"
+        Height="780"
+        MinWidth="1020"
+        MinHeight="640"
+        WindowStartupLocation="CenterScreen"
+        ExtendClientAreaToDecorationsHint="True"
+        ExtendClientAreaChromeHints="PreferSystemChrome"
+        ExtendClientAreaTitleBarHeightHint="38"
         Icon="NEW LOGO.png"
         Background="{DynamicResource BackgroundBrush}">
 
-  <Grid x:Name="MainGrid" RowDefinitions="Auto,*,Auto" Background="{DynamicResource BackgroundBrush}">
-    <!-- Main Area -->
-    <Grid Grid.Row="0" Grid.RowSpan="2" ColumnDefinitions="240,*" Background="{DynamicResource BackgroundBrush}">
+  <Grid x:Name="MainGrid" RowDefinitions="*,28" Background="{DynamicResource BackgroundBrush}">
 
-      <!-- Sidebar -->
-      <Border Grid.Column="0" Background="{DynamicResource SurfaceBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="0,0,1,0">
-        <Grid RowDefinitions="Auto,*">
-          <!-- App Title / Logo Area -->
-          <StackPanel Grid.Row="0" Margin="20,24">
-            <TextBlock Text="DiscordMultiTool" FontSize="20" FontWeight="Bold" Foreground="{DynamicResource ForegroundBrush}" />
-            <TextBlock x:Name="SidebarVersionText" Text="v3.6.0 dashboard" FontSize="12" Foreground="{DynamicResource TextBrush}" Margin="0,4,0,0" />
-          </StackPanel>
+    <!-- Main Workspace Shell -->
+    <Grid Grid.Row="0" ColumnDefinitions="252,*">
 
-          <!-- Navigation -->
-          <ScrollViewer Grid.Row="1" Margin="12,0">
-            <StackPanel Spacing="4">
-              <Button Content="{DynamicResource Str_Dashboard}" Click="NavigateToDashboard" Classes="SidebarButton" HorizontalAlignment="Stretch" />
-              <Button Content="{DynamicResource Str_RichPresence}" Click="NavigateToRichPresence" Classes="SidebarButton" HorizontalAlignment="Stretch" />
-              <Button Content="{DynamicResource Str_DiscordBot}" Click="NavigateToDiscordBot" Classes="SidebarButton" HorizontalAlignment="Stretch" />
-              <Button Content="{DynamicResource Str_TelegramBot}" Click="NavigateToTelegramBot" Classes="SidebarButton" HorizontalAlignment="Stretch" />
-              <Button Content="{DynamicResource Str_ProcessManager}" Click="NavigateToProcessManager" Classes="SidebarButton" HorizontalAlignment="Stretch" />
-              <Separator Background="{DynamicResource BorderBrush}" Height="1" Margin="8,12" />
-              <Button Content="{DynamicResource Str_Settings}" Click="NavigateToSettings" Classes="SidebarButton" HorizontalAlignment="Stretch" />
-              <Separator Background="{DynamicResource BorderBrush}" Height="1" Margin="8,12" />
-              <Button Content="{DynamicResource Str_AccountLogin}" Click="NavigateToLogin" Classes="SidebarButton" HorizontalAlignment="Stretch" Background="#1E1E2E" Foreground="#CBA6F7" />
+      <!-- Left Navigation Rail -->
+      <Border Grid.Column="0"
+              Background="{DynamicResource SidebarBrush}"
+              BorderBrush="{DynamicResource BorderBrush}"
+              BorderThickness="0,0,1,0">
+        <Grid RowDefinitions="Auto,*,Auto">
+
+          <!-- Brand Header (also draggable in top region) -->
+          <Border Grid.Row="0" Padding="18,20,18,16" Background="Transparent" PointerPressed="OnTitleBarPointerPressed">
+            <Grid ColumnDefinitions="Auto,*,Auto">
+              <Border Width="38" Height="38" CornerRadius="10" ClipToBounds="True" BorderBrush="{DynamicResource BorderStrongBrush}" BorderThickness="1" Background="{DynamicResource SurfaceBrush}">
+                <Image Source="NEW LOGO.png" Stretch="UniformToFill" />
+              </Border>
+              <StackPanel Grid.Column="1" Margin="12,0,0,0" VerticalAlignment="Center" Spacing="2">
+                <TextBlock Text="DiscordMultiTool" FontSize="15" FontWeight="Bold" Foreground="{DynamicResource ForegroundBrush}" />
+                <TextBlock x:Name="SidebarVersionText" Text="v3.6.0 • Studio" FontSize="11" Foreground="{DynamicResource TextMutedBrush}" FontFamily="{StaticResource MonoFont}" />
+              </StackPanel>
+            </Grid>
+          </Border>
+
+          <!-- Categorized Nav Links -->
+          <local:SmoothScrollViewer Grid.Row="1" Margin="12,0" VerticalScrollBarVisibility="Auto">
+            <StackPanel Spacing="3">
+              <TextBlock Text="{DynamicResource Str_Nav_Overview}" Classes="Eyebrow" Margin="10,4,0,6" />
+
+              <Button x:Name="NavDashboardBtn" Click="NavigateToDashboard" Classes="SidebarButton Active">
+                <Grid ColumnDefinitions="Auto,*,Auto">
+                  <PathIcon Width="15" Height="15" Foreground="{Binding $parent[Button].Foreground}"
+                            Data="M3,13H11V3H3V13ZM3,21H11V15H3V21ZM13,21H21V11H13V21ZM13,3V9H21V3H13Z" />
+                  <TextBlock Grid.Column="1" Text="{DynamicResource Str_Dashboard}" Margin="12,0,0,0" VerticalAlignment="Center" />
+                </Grid>
+              </Button>
+
+              <TextBlock Text="{DynamicResource Str_Nav_Modules}" Classes="Eyebrow" Margin="10,16,0,6" />
+
+              <Button x:Name="NavRpcBtn" Click="NavigateToRichPresence" Classes="SidebarButton">
+                <Grid ColumnDefinitions="Auto,*,Auto">
+                  <PathIcon Width="15" Height="15" Foreground="{Binding $parent[Button].Foreground}"
+                            Data="M21,6H3A2,2 0 0,0 1,8V16A2,2 0 0,0 3,18H21A2,2 0 0,0 23,16V8A2,2 0 0,0 21,6M11,13H8V16H6V13H3V11H6V8H8V11H11V13M15.5,15A1.5,1.5 0 0,1 14,13.5A1.5,1.5 0 0,1 15.5,12A1.5,1.5 0 0,1 17,13.5A1.5,1.5 0 0,1 15.5,15M19.5,12A1.5,1.5 0 0,1 18,10.5A1.5,1.5 0 0,1 19.5,9A1.5,1.5 0 0,1 21,10.5A1.5,1.5 0 0,1 19.5,12Z" />
+                  <TextBlock Grid.Column="1" Text="{DynamicResource Str_RichPresence}" Margin="12,0,0,0" VerticalAlignment="Center" />
+                  <Ellipse x:Name="NavRpcDot" Grid.Column="2" Width="7" Height="7" Fill="{DynamicResource SuccessBrush}" IsVisible="False" VerticalAlignment="Center" />
+                </Grid>
+              </Button>
+
+              <Button x:Name="NavDiscordBotBtn" Click="NavigateToDiscordBot" Classes="SidebarButton">
+                <Grid ColumnDefinitions="Auto,*,Auto">
+                  <PathIcon Width="15" Height="15" Foreground="{Binding $parent[Button].Foreground}"
+                            Data="M19.27,5.33C17.94,4.71 16.5,4.26 15,4a.09.09 0 0,0-.07.03c-.18.33-.39.76-.53,1.09a16.09,16.09 0 0,0-4.8,0c-.14-.34-.35-.76-.54-1.09c-.01-.02-.04-.03-.07-.03c-1.5.26-2.93.71-4.27,1.33c-.01,0-.02.01-.03.02c-2.72,4.07-3.47,8.03-3.1,11.95c0,.02.01.04.03.05c1.8,1.32 3.53,2.12 5.24,2.65c.03.01.06,0 .07-.02c.4-.55.76-1.13 1.07-1.74c.02-.04 0-.08-.04-.09c-.57-.22-1.11-.48-1.64-.78c-.04-.02-.04-.08-.01-.11c.11-.08.22-.17.33-.25c.02-.02.05-.02.07-.01c3.44,1.57 7.15,1.57 10.55,0c.02-.01.05-.01.07.01c.11.09.22.17.33.26c.04.03.04.09-.01.11c-.52.31-1.07.56-1.64.78c-.04.01-.05.06-.04.09c.32.61.68,1.19 1.07,1.74c.03.01.06.02.09.01c1.72-.53 3.45-1.33 5.25-2.65c.02-.01.03-.03.03-.05c.44-4.53-.73-8.46-3.1-11.95c-.01-.01-.02-.02-.04-.02ZM8.52,14.91c-1.03,0-1.89-.95-1.89-2.12s.84-2.12 1.89-2.12c1.06,0 1.9.96 1.89,2.12c0,1.17-.84,2.12-1.89,2.12Zm6.97,0c-1.03,0-1.89-.95-1.89-2.12s.84-2.12 1.89-2.12c1.06,0 1.9.96 1.89,2.12c0,1.17-.83,2.12-1.89,2.12Z" />
+                  <TextBlock Grid.Column="1" Text="{DynamicResource Str_DiscordBot}" Margin="12,0,0,0" VerticalAlignment="Center" />
+                  <Ellipse x:Name="NavDiscordBotDot" Grid.Column="2" Width="7" Height="7" Fill="{DynamicResource SuccessBrush}" IsVisible="False" VerticalAlignment="Center" />
+                </Grid>
+              </Button>
+
+              <Button x:Name="NavTelegramBotBtn" Click="NavigateToTelegramBot" Classes="SidebarButton">
+                <Grid ColumnDefinitions="Auto,*,Auto">
+                  <PathIcon Width="15" Height="15" Foreground="{Binding $parent[Button].Foreground}"
+                            Data="M9.78,18.65L10.06,14.42L17.74,7.5C18.08,7.19 17.67,7.04 17.22,7.31L7.74,13.3L3.64,12C2.76,11.75 2.75,11.14 3.84,10.7L19.81,4.54C20.54,4.21 21.24,4.72 20.96,5.84L18.24,18.65C18.05,19.56 17.5,19.78 16.74,19.36L12.6,16.3L10.61,18.23C10.38,18.46 10.19,18.65 9.78,18.65Z" />
+                  <TextBlock Grid.Column="1" Text="{DynamicResource Str_TelegramBot}" Margin="12,0,0,0" VerticalAlignment="Center" />
+                  <Ellipse x:Name="NavTelegramBotDot" Grid.Column="2" Width="7" Height="7" Fill="{DynamicResource TelegramBrush}" IsVisible="False" VerticalAlignment="Center" />
+                </Grid>
+              </Button>
+
+              <Button x:Name="NavProcessBtn" Click="NavigateToProcessManager" Classes="SidebarButton">
+                <Grid ColumnDefinitions="Auto,*,Auto">
+                  <PathIcon Width="15" Height="15" Foreground="{Binding $parent[Button].Foreground}"
+                            Data="M3,13H5.79L10.1,4.79L13.9,18.21L17.21,11H21V13H18.42L13.5,22.79L9.7,9.29L7.05,15H3V13Z" />
+                  <TextBlock Grid.Column="1" Text="{DynamicResource Str_ProcessManager}" Margin="12,0,0,0" VerticalAlignment="Center" />
+                </Grid>
+              </Button>
+
+              <TextBlock Text="{DynamicResource Str_Nav_System}" Classes="Eyebrow" Margin="10,16,0,6" />
+
+              <Button x:Name="NavSettingsBtn" Click="NavigateToSettings" Classes="SidebarButton">
+                <Grid ColumnDefinitions="Auto,*,Auto">
+                  <PathIcon Width="15" Height="15" Foreground="{Binding $parent[Button].Foreground}"
+                            Data="M12,15.5A3.5,3.5 0 0,1 8.5,12A3.5,3.5 0 0,1 12,8.5A3.5,3.5 0 0,1 15.5,12A3.5,3.5 0 0,1 12,15.5M19.43,12.97C19.47,12.65 19.5,12.33 19.5,12C19.5,11.67 19.47,11.34 19.43,11L21.54,9.37C21.73,9.22 21.78,8.95 21.66,8.73L19.66,5.27C19.54,5.05 19.27,4.96 19.05,5.05L16.56,6.05C16.04,5.66 15.5,5.32 14.87,5.07L14.5,2.42C14.46,2.18 14.25,2 14,2H10C9.75,2 9.54,2.18 9.5,2.42L9.13,5.07C8.5,5.32 7.96,5.66 7.44,6.05L4.95,5.05C4.73,4.96 4.46,5.05 4.34,5.27L2.34,8.73C2.21,8.95 2.27,9.22 2.46,9.37L4.57,11C4.53,11.34 4.5,11.67 4.5,12C4.5,12.33 4.53,12.65 4.57,12.97L2.46,14.63C2.27,14.78 2.21,15.05 2.34,15.27L4.34,18.73C4.46,18.95 4.73,19.03 4.95,18.95L7.44,17.94C7.96,18.34 8.5,18.68 9.13,18.93L9.5,21.58C9.54,21.82 9.75,22 10,22H14C14.25,22 14.46,21.82 14.5,21.58L14.87,18.93C15.5,18.67 16.04,18.34 16.56,17.94L19.05,18.95C19.27,19.03 19.54,18.95 19.66,18.73L21.66,15.27C21.78,15.05 21.73,14.78 21.54,14.63L19.43,12.97Z" />
+                  <TextBlock Grid.Column="1" Text="{DynamicResource Str_Settings}" Margin="12,0,0,0" VerticalAlignment="Center" />
+                </Grid>
+              </Button>
             </StackPanel>
-          </ScrollViewer>
+          </local:SmoothScrollViewer>
+
+          <!-- Bottom Pinned HUD Quick Toggle + Account Card -->
+          <Border Grid.Row="2" Padding="12" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="0,1,0,0">
+            <StackPanel Spacing="8">
+              <!-- Quick HUD Pill -->
+              <Button Click="ToggleOverlay_Click" Classes="AnimatedButton" HorizontalAlignment="Stretch" Padding="12,8">
+                <Grid ColumnDefinitions="Auto,*,Auto" HorizontalAlignment="Stretch">
+                  <PathIcon Width="14" Height="14" Foreground="{DynamicResource AccentBrush}"
+                            Data="M19,3H5C3.89,3 3,3.89 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5C21,3.89 20.1,3 19,3M19,19H5V7H19V19Z" />
+                  <TextBlock Grid.Column="1" Text="{DynamicResource Str_ToggleOverlay}" FontSize="12.5" Margin="10,0,0,0" VerticalAlignment="Center" />
+                  <Ellipse x:Name="NavOverlayDot" Grid.Column="2" Width="7" Height="7" Fill="{DynamicResource SuccessBrush}" IsVisible="False" VerticalAlignment="Center" />
+                </Grid>
+              </Button>
+
+              <!-- Account Dock Button -->
+              <Button x:Name="NavAccountBtn" Click="NavigateToLogin" Classes="SidebarButton" Padding="10,8" Background="{DynamicResource SurfaceBrush}" BorderBrush="{DynamicResource BorderBrush}">
+                <Grid ColumnDefinitions="Auto,*,Auto">
+                  <Border Width="30" Height="30" CornerRadius="15" Background="{DynamicResource AccentSoftBrush}" BorderBrush="#445865F2" BorderThickness="1">
+                    <PathIcon Width="14" Height="14" Foreground="{DynamicResource AccentBrush}"
+                              Data="M12,4A4,4 0 0,1 16,8A4,4 0 0,1 12,12A4,4 0 0,1 8,8A4,4 0 0,1 12,4M12,14C16.42,14 20,15.79 20,18V20H4V18C4,15.79 7.58,14 12,14Z" />
+                  </Border>
+                  <StackPanel Grid.Column="1" Margin="10,0,6,0" VerticalAlignment="Center" Spacing="1">
+                    <TextBlock Text="{DynamicResource Str_AccountLogin}" FontSize="12.5" FontWeight="SemiBold" Foreground="{DynamicResource ForegroundBrush}" />
+                    <TextBlock x:Name="SidebarAccountEmailText" Text="{DynamicResource Str_NotSignedIn}" FontSize="11" Foreground="{DynamicResource TextMutedBrush}" TextTrimming="CharacterEllipsis" />
+                  </StackPanel>
+                  <Ellipse x:Name="SidebarAccountDot" Grid.Column="2" Width="8" Height="8" Fill="{DynamicResource TextMutedBrush}" VerticalAlignment="Center" />
+                </Grid>
+              </Button>
+            </StackPanel>
+          </Border>
         </Grid>
       </Border>
 
-      <!-- Content Area -->
-      <Border Grid.Column="1" Padding="32">
-        <Grid RowDefinitions="Auto,*">
-          <!-- Content Header -->
-          <StackPanel Grid.Row="0" Margin="0,0,0,24">
-            <TextBlock x:Name="PageTitle" Text="{DynamicResource Str_Dashboard}" FontSize="28" FontWeight="Bold" Foreground="{DynamicResource ForegroundBrush}" />
-            <TextBlock x:Name="PageDescription" Text="{DynamicResource Str_Header_Dashboard}" FontSize="14" Foreground="{DynamicResource TextBrush}" Margin="0,8,0,0" />
+      <!-- Right Content Shell -->
+      <Grid Grid.Column="1" RowDefinitions="38,Auto,*">
+
+        <!-- Custom Draggable Window Title Strip -->
+        <Border Grid.Row="0" Background="Transparent" PointerPressed="OnTitleBarPointerPressed">
+          <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="28,0,160,0" Spacing="8">
+            <TextBlock Text="WORKSPACE" FontSize="10" FontWeight="Bold" LetterSpacing="1.2" Foreground="{DynamicResource TextMutedBrush}" VerticalAlignment="Center" />
+            <TextBlock Text="/" FontSize="11" Foreground="{DynamicResource TextMutedBrush}" VerticalAlignment="Center" />
+            <TextBlock x:Name="BreadcrumbText" Text="{DynamicResource Str_Dashboard}" FontSize="11.5" FontWeight="SemiBold" Foreground="{DynamicResource TextBrush}" VerticalAlignment="Center" />
           </StackPanel>
+        </Border>
 
-          <!-- Views -->
-          <ScrollViewer x:Name="ContentScroller" Grid.Row="1">
-            <StackPanel Margin="0,0,8,24">
+        <!-- Page Header -->
+        <Border Grid.Row="1" Padding="32,8,32,20" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="0,0,0,1">
+          <Grid ColumnDefinitions="*,Auto">
+            <StackPanel Spacing="4">
+              <TextBlock x:Name="PageTitle" Text="{DynamicResource Str_Dashboard}" FontSize="24" FontWeight="Bold" Foreground="{DynamicResource ForegroundBrush}" />
+              <TextBlock x:Name="PageDescription" Text="{DynamicResource Str_Header_Dashboard}" FontSize="13" Foreground="{DynamicResource TextBrush}" />
+            </StackPanel>
 
-              <!-- Dashboard Content -->
-              <StackPanel x:Name="DashboardContent" IsVisible="True" Classes="ContentPage">
-                <Grid ColumnDefinitions="*,*,*" Margin="0,0,0,24">
-                  <!-- Discord Status Card -->
-                  <Border x:Name="DiscordCard" Classes="AnimatedCard" Margin="0,0,12,0">
-                    <StackPanel>
-                      <TextBlock Text="Discord" FontSize="14" FontWeight="Bold" Foreground="#8B5CF6" Margin="0,0,0,12" />
-                      <TextBlock x:Name="DiscordStatusText" Text="{DynamicResource Str_Checking}" FontSize="13" Foreground="{DynamicResource TextBrush}" Margin="0,0,0,16" />
-                      <Button Content="{DynamicResource Str_RefreshStatus}" Click="RefreshStatus" Classes="AnimatedButton" HorizontalAlignment="Left" />
-                    </StackPanel>
-                  </Border>
+            <!-- Live Header Badges -->
+            <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+              <Border x:Name="HeaderRpcBadge" Background="{DynamicResource SurfaceBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="20" Padding="12,5">
+                <StackPanel Orientation="Horizontal" Spacing="7">
+                  <Ellipse x:Name="HeaderRpcDot" Width="7" Height="7" Fill="{DynamicResource TextMutedBrush}" VerticalAlignment="Center" />
+                  <TextBlock x:Name="HeaderRpcText" Text="RPC Idle" FontSize="11.5" FontWeight="SemiBold" Foreground="{DynamicResource TextBrush}" VerticalAlignment="Center" />
+                </StackPanel>
+              </Border>
+              <Border x:Name="HeaderHudBadge" Background="{DynamicResource SurfaceBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="20" Padding="12,5">
+                <StackPanel Orientation="Horizontal" Spacing="7">
+                  <Ellipse x:Name="HeaderHudDot" Width="7" Height="7" Fill="{DynamicResource TextMutedBrush}" VerticalAlignment="Center" />
+                  <TextBlock x:Name="HeaderHudText" Text="HUD Off" FontSize="11.5" FontWeight="SemiBold" Foreground="{DynamicResource TextBrush}" VerticalAlignment="Center" />
+                </StackPanel>
+              </Border>
+            </StackPanel>
+          </Grid>
+        </Border>
 
-                  <!-- Telegram Status Card -->
-                  <Border x:Name="TelegramCard" Grid.Column="1" Classes="AnimatedCard" Margin="0,0,12,0">
-                    <StackPanel>
-                      <TextBlock Text="Telegram" FontSize="14" FontWeight="Bold" Foreground="#10B981" Margin="0,0,0,12" />
-                      <TextBlock x:Name="TelegramStatusText" Text="{DynamicResource Str_Checking}" FontSize="13" Foreground="{DynamicResource TextBrush}" Margin="0,0,0,16" />
-                      <Button Content="{DynamicResource Str_RefreshStatus}" Click="RefreshStatus" Classes="AnimatedButton" HorizontalAlignment="Left" />
-                    </StackPanel>
-                  </Border>
+        <!-- Scrollable Page Viewport -->
+        <local:SmoothScrollViewer x:Name="ContentScroller" Grid.Row="2" Padding="32,24,32,32">
+          <StackPanel>
 
-                  <!-- App Info Card -->
-                  <Border x:Name="AppCard" Grid.Column="2" Classes="AnimatedCard">
-                    <StackPanel>
-                      <TextBlock Text="{DynamicResource Str_System}" FontSize="14" FontWeight="Bold" Foreground="{DynamicResource ForegroundBrush}" Margin="0,0,0,12" />
-                      <TextBlock x:Name="AppVersionText" Text="v3.6.0 Stable" FontSize="13" Foreground="{DynamicResource TextBrush}" Margin="0,0,0,16" />
-                      <Button Content="{DynamicResource Str_CheckUpdates}" Click="CheckUpdates_Click" Classes="AnimatedButton" HorizontalAlignment="Left" />
-                    </StackPanel>
-                  </Border>
+            <!-- ==================== 1. DASHBOARD ==================== -->
+            <StackPanel x:Name="DashboardContent" IsVisible="True" Spacing="24">
+
+              <!-- Telemetry Cards -->
+              <Grid ColumnDefinitions="*,*,*">
+                <!-- Discord Card -->
+                <Border x:Name="DiscordCard" Classes="AnimatedCard" Margin="0,0,8,0">
+                  <Grid RowDefinitions="Auto,Auto,Auto">
+                    <Grid ColumnDefinitions="Auto,*,Auto">
+                      <Border Width="34" Height="34" CornerRadius="9" Background="{DynamicResource AccentSoftBrush}" BorderBrush="#405865F2" BorderThickness="1">
+                        <PathIcon Width="16" Height="16" Foreground="{DynamicResource AccentBrush}"
+                                  Data="M19.27,5.33C17.94,4.71 16.5,4.26 15,4a.09.09 0 0,0-.07.03c-.18.33-.39.76-.53,1.09a16.09,16.09 0 0,0-4.8,0c-.14-.34-.35-.76-.54-1.09c-.01-.02-.04-.03-.07-.03c-1.5.26-2.93.71-4.27,1.33c-.01,0-.02.01-.03.02c-2.72,4.07-3.47,8.03-3.1,11.95c0,.02.01.04.03.05c1.8,1.32 3.53,2.12 5.24,2.65c.03.01.06,0 .07-.02c.4-.55.76-1.13 1.07-1.74c.02-.04 0-.08-.04-.09c-.57-.22-1.11-.48-1.64-.78c-.04-.02-.04-.08-.01-.11c.11-.08.22-.17.33-.25c.02-.02.05-.02.07-.01c3.44,1.57 7.15,1.57 10.55,0c.02-.01.05-.01.07.01c.11.09.22.17.33.26c.04.03.04.09-.01.11c-.52.31-1.07.56-1.64.78c-.04.01-.05.06-.04.09c.32.61.68,1.19 1.07,1.74c.03.01.06.02.09.01c1.72-.53 3.45-1.33 5.25-2.65c.02-.01.03-.03.03-.05c.44-4.53-.73-8.46-3.1-11.95c-.01-.01-.02-.02-.04-.02Z" />
+                      </Border>
+                      <TextBlock Grid.Column="1" Text="Discord Client" FontSize="14" FontWeight="SemiBold" VerticalAlignment="Center" Margin="12,0,0,0" />
+                      <Border x:Name="DiscordStatusPill" Grid.Column="2" CornerRadius="12" Padding="9,3" Background="{DynamicResource SurfaceElevatedBrush}">
+                        <TextBlock x:Name="DiscordStatusText" Text="{DynamicResource Str_Checking}" FontSize="11.5" FontWeight="SemiBold" Foreground="{DynamicResource TextBrush}" />
+                      </Border>
+                    </Grid>
+                    <TextBlock Grid.Row="1" Text="Desktop IPC &amp; Rich Presence target" FontSize="12" Foreground="{DynamicResource TextMutedBrush}" Margin="0,12,0,14" />
+                    <Button Grid.Row="2" Content="{DynamicResource Str_RefreshStatus}" Click="RefreshStatus" Classes="AnimatedButton" HorizontalAlignment="Left" Padding="12,6" FontSize="12" />
+                  </Grid>
+                </Border>
+
+                <!-- Telegram Card -->
+                <Border x:Name="TelegramCard" Grid.Column="1" Classes="AnimatedCard" Margin="8,0,8,0">
+                  <Grid RowDefinitions="Auto,Auto,Auto">
+                    <Grid ColumnDefinitions="Auto,*,Auto">
+                      <Border Width="34" Height="34" CornerRadius="9" Background="{DynamicResource TelegramSoftBrush}" BorderBrush="#402AABEE" BorderThickness="1">
+                        <PathIcon Width="15" Height="15" Foreground="{DynamicResource TelegramBrush}"
+                                  Data="M9.78,18.65L10.06,14.42L17.74,7.5C18.08,7.19 17.67,7.04 17.22,7.31L7.74,13.3L3.64,12C2.76,11.75 2.75,11.14 3.84,10.7L19.81,4.54C20.54,4.21 21.24,4.72 20.96,5.84L18.24,18.65C18.05,19.56 17.5,19.78 16.74,19.36L12.6,16.3L10.61,18.23C10.38,18.46 10.19,18.65 9.78,18.65Z" />
+                      </Border>
+                      <TextBlock Grid.Column="1" Text="Telegram Client" FontSize="14" FontWeight="SemiBold" VerticalAlignment="Center" Margin="12,0,0,0" />
+                      <Border x:Name="TelegramStatusPill" Grid.Column="2" CornerRadius="12" Padding="9,3" Background="{DynamicResource SurfaceElevatedBrush}">
+                        <TextBlock x:Name="TelegramStatusText" Text="{DynamicResource Str_Checking}" FontSize="11.5" FontWeight="SemiBold" Foreground="{DynamicResource TextBrush}" />
+                      </Border>
+                    </Grid>
+                    <TextBlock Grid.Row="1" Text="Desktop process &amp; bot ecosystem" FontSize="12" Foreground="{DynamicResource TextMutedBrush}" Margin="0,12,0,14" />
+                    <Button Grid.Row="2" Content="{DynamicResource Str_RefreshStatus}" Click="RefreshStatus" Classes="AnimatedButton" HorizontalAlignment="Left" Padding="12,6" FontSize="12" />
+                  </Grid>
+                </Border>
+
+                <!-- App Build Card -->
+                <Border x:Name="AppCard" Grid.Column="2" Classes="AnimatedCard" Margin="8,0,0,0">
+                  <Grid RowDefinitions="Auto,Auto,Auto">
+                    <Grid ColumnDefinitions="Auto,*,Auto">
+                      <Border Width="34" Height="34" CornerRadius="9" Background="{DynamicResource SuccessSoftBrush}" BorderBrush="#4023A55A" BorderThickness="1">
+                        <PathIcon Width="15" Height="15" Foreground="{DynamicResource SuccessBrush}"
+                                  Data="M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M11,16.5L18,9.5L16.59,8.09L11,13.67L7.91,10.59L6.5,12L11,16.5Z" />
+                      </Border>
+                      <TextBlock Grid.Column="1" Text="{DynamicResource Str_System}" FontSize="14" FontWeight="SemiBold" VerticalAlignment="Center" Margin="12,0,0,0" />
+                      <Border Grid.Column="2" CornerRadius="12" Padding="9,3" Background="{DynamicResource SurfaceElevatedBrush}">
+                        <TextBlock x:Name="AppVersionText" Text="v3.6.0" FontSize="11.5" FontWeight="SemiBold" FontFamily="{StaticResource MonoFont}" Foreground="{DynamicResource ForegroundBrush}" />
+                      </Border>
+                    </Grid>
+                    <TextBlock Grid.Row="1" Text=".NET 8.0 • Avalonia 11.3 Engine" FontSize="12" Foreground="{DynamicResource TextMutedBrush}" Margin="0,12,0,14" />
+                    <Button Grid.Row="2" Content="{DynamicResource Str_CheckUpdates}" Click="CheckUpdates_Click" Classes="AnimatedButton" HorizontalAlignment="Left" Padding="12,6" FontSize="12" />
+                  </Grid>
+                </Border>
+              </Grid>
+
+              <!-- Bento Module Grid -->
+              <StackPanel Spacing="12">
+                <TextBlock Text="{DynamicResource Str_QuickActions}" FontSize="15" FontWeight="Bold" Foreground="{DynamicResource ForegroundBrush}" />
+
+                <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto">
+                  <!-- RPC Bento -->
+                  <Button Grid.Row="0" Grid.Column="0" Click="NavigateToRichPresence" Classes="ModuleCardButton" Margin="0,0,8,8">
+                    <Grid ColumnDefinitions="Auto,*,Auto">
+                      <Border Width="42" Height="42" CornerRadius="10" Background="{DynamicResource AccentSoftBrush}">
+                        <PathIcon Width="18" Height="18" Foreground="{DynamicResource AccentBrush}"
+                                  Data="M21,6H3A2,2 0 0,0 1,8V16A2,2 0 0,0 3,18H21A2,2 0 0,0 23,16V8A2,2 0 0,0 21,6M11,13H8V16H6V13H3V11H6V8H8V11H11V13M15.5,15A1.5,1.5 0 0,1 14,13.5A1.5,1.5 0 0,1 15.5,12A1.5,1.5 0 0,1 17,13.5A1.5,1.5 0 0,1 15.5,15M19.5,12A1.5,1.5 0 0,1 18,10.5A1.5,1.5 0 0,1 19.5,9A1.5,1.5 0 0,1 21,10.5A1.5,1.5 0 0,1 19.5,12Z" />
+                      </Border>
+                      <StackPanel Grid.Column="1" Margin="14,0" VerticalAlignment="Center" Spacing="3">
+                        <TextBlock Text="{DynamicResource Str_SetRichPresence}" FontSize="14.5" FontWeight="SemiBold" Foreground="{DynamicResource ForegroundBrush}" />
+                        <TextBlock Text="{DynamicResource Str_Desc_RichPresence}" FontSize="12" Foreground="{DynamicResource TextBrush}" TextWrapping="Wrap" />
+                      </StackPanel>
+                      <TextBlock Grid.Column="2" Text="→" FontSize="16" Foreground="{DynamicResource TextMutedBrush}" VerticalAlignment="Center" />
+                    </Grid>
+                  </Button>
+
+                  <!-- Discord Bot Bento -->
+                  <Button Grid.Row="0" Grid.Column="1" Click="NavigateToDiscordBot" Classes="ModuleCardButton" Margin="8,0,0,8">
+                    <Grid ColumnDefinitions="Auto,*,Auto">
+                      <Border Width="42" Height="42" CornerRadius="10" Background="{DynamicResource AccentSoftBrush}">
+                        <PathIcon Width="18" Height="18" Foreground="{DynamicResource AccentBrush}"
+                                  Data="M20,19V7H4V19H20M20,3A2,2 0 0,1 22,5V19A2,2 0 0,1 20,21H4A2,2 0 0,1 2,19V5C2,3.89 2.89,3 4,3H20M13,17V15H18V17H13M9.58,13L5.57,9H8.4L11.7,12.3C12.09,12.69 12.09,13.33 11.7,13.72L8.42,17H5.59L9.58,13Z" />
+                      </Border>
+                      <StackPanel Grid.Column="1" Margin="14,0" VerticalAlignment="Center" Spacing="3">
+                        <TextBlock Text="{DynamicResource Str_LoadDiscordBot}" FontSize="14.5" FontWeight="SemiBold" Foreground="{DynamicResource ForegroundBrush}" />
+                        <TextBlock Text="{DynamicResource Str_Desc_DiscordBot}" FontSize="12" Foreground="{DynamicResource TextBrush}" TextWrapping="Wrap" />
+                      </StackPanel>
+                      <TextBlock Grid.Column="2" Text="→" FontSize="16" Foreground="{DynamicResource TextMutedBrush}" VerticalAlignment="Center" />
+                    </Grid>
+                  </Button>
+
+                  <!-- Telegram Bot Bento -->
+                  <Button Grid.Row="1" Grid.Column="0" Click="NavigateToTelegramBot" Classes="ModuleCardButton" Margin="0,8,8,0">
+                    <Grid ColumnDefinitions="Auto,*,Auto">
+                      <Border Width="42" Height="42" CornerRadius="10" Background="{DynamicResource TelegramSoftBrush}">
+                        <PathIcon Width="18" Height="18" Foreground="{DynamicResource TelegramBrush}"
+                                  Data="M9.78,18.65L10.06,14.42L17.74,7.5C18.08,7.19 17.67,7.04 17.22,7.31L7.74,13.3L3.64,12C2.76,11.75 2.75,11.14 3.84,10.7L19.81,4.54C20.54,4.21 21.24,4.72 20.96,5.84L18.24,18.65C18.05,19.56 17.5,19.78 16.74,19.36L12.6,16.3L10.61,18.23C10.38,18.46 10.19,18.65 9.78,18.65Z" />
+                      </Border>
+                      <StackPanel Grid.Column="1" Margin="14,0" VerticalAlignment="Center" Spacing="3">
+                        <TextBlock Text="{DynamicResource Str_LoadTelegramBot}" FontSize="14.5" FontWeight="SemiBold" Foreground="{DynamicResource ForegroundBrush}" />
+                        <TextBlock Text="{DynamicResource Str_Desc_TelegramBot}" FontSize="12" Foreground="{DynamicResource TextBrush}" TextWrapping="Wrap" />
+                      </StackPanel>
+                      <TextBlock Grid.Column="2" Text="→" FontSize="16" Foreground="{DynamicResource TextMutedBrush}" VerticalAlignment="Center" />
+                    </Grid>
+                  </Button>
+
+                  <!-- Process Monitor Bento -->
+                  <Button Grid.Row="1" Grid.Column="1" Click="NavigateToProcessManager" Classes="ModuleCardButton" Margin="8,8,0,0">
+                    <Grid ColumnDefinitions="Auto,*,Auto">
+                      <Border Width="42" Height="42" CornerRadius="10" Background="{DynamicResource SuccessSoftBrush}">
+                        <PathIcon Width="18" Height="18" Foreground="{DynamicResource SuccessBrush}"
+                                  Data="M3,13H5.79L10.1,4.79L13.9,18.21L17.21,11H21V13H18.42L13.5,22.79L9.7,9.29L7.05,15H3V13Z" />
+                      </Border>
+                      <StackPanel Grid.Column="1" Margin="14,0" VerticalAlignment="Center" Spacing="3">
+                        <TextBlock Text="{DynamicResource Str_ProcessManager}" FontSize="14.5" FontWeight="SemiBold" Foreground="{DynamicResource ForegroundBrush}" />
+                        <TextBlock Text="{DynamicResource Str_Desc_ProcessManager}" FontSize="12" Foreground="{DynamicResource TextBrush}" TextWrapping="Wrap" />
+                      </StackPanel>
+                      <TextBlock Grid.Column="2" Text="→" FontSize="16" Foreground="{DynamicResource TextMutedBrush}" VerticalAlignment="Center" />
+                    </Grid>
+                  </Button>
                 </Grid>
 
-                <TextBlock Text="{DynamicResource Str_QuickActions}" FontSize="18" FontWeight="SemiBold" Foreground="{DynamicResource ForegroundBrush}" Margin="0,0,0,16" />
-                <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto,Auto">
-                  <Button Content="{DynamicResource Str_SetRichPresence}" Click="NavigateToRichPresence" Classes="AnimatedButton" Margin="0,0,8,8" HorizontalAlignment="Stretch" />
-                  <Button Grid.Column="1" Content="{DynamicResource Str_LoadDiscordBot}" Click="NavigateToDiscordBot" Classes="AnimatedButton" Margin="8,0,0,8" HorizontalAlignment="Stretch" />
-                  <Button Grid.Row="1" Content="{DynamicResource Str_LoadTelegramBot}" Click="NavigateToTelegramBot" Classes="AnimatedButton" Margin="0,8,8,0" HorizontalAlignment="Stretch" />
-                  <Button Grid.Row="1" Grid.Column="1" Content="{DynamicResource Str_ProcessManager}" Click="NavigateToProcessManager" Classes="AnimatedButton" Margin="8,8,0,0" HorizontalAlignment="Stretch" />
-                  <Button Grid.Row="2" Grid.ColumnSpan="2" Content="{DynamicResource Str_ToggleOverlay}" Click="ToggleOverlay_Click" Classes="AnimatedButton" Margin="0,12,0,0" HorizontalAlignment="Stretch" Background="#334155" />
-                </Grid>
+                <!-- Floating HUD Spotlight Banner -->
+                <Border Classes="AnimatedCard" Background="#161B2B" BorderBrush="#355865F2" Padding="20,16" Margin="0,4,0,0">
+                  <Grid ColumnDefinitions="Auto,*,Auto">
+                    <Border Width="42" Height="42" CornerRadius="10" Background="{DynamicResource AccentSoftBrush}">
+                      <PathIcon Width="18" Height="18" Foreground="{DynamicResource AccentBrush}"
+                                Data="M19,3H5C3.89,3 3,3.89 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5C21,3.89 20.1,3 19,3M19,19H5V7H19V19Z" />
+                    </Border>
+                    <StackPanel Grid.Column="1" Margin="16,0" VerticalAlignment="Center" Spacing="3">
+                      <TextBlock Text="Floating Desktop HUD" FontSize="14.5" FontWeight="SemiBold" Foreground="{DynamicResource ForegroundBrush}" />
+                      <TextBlock Text="{DynamicResource Str_Desc_Overlay}" FontSize="12" Foreground="{DynamicResource TextBrush}" />
+                    </StackPanel>
+                    <Button Grid.Column="2" Content="{DynamicResource Str_ToggleOverlay}" Click="ToggleOverlay_Click" Classes="PrimaryButton" VerticalAlignment="Center" />
+                  </Grid>
+                </Border>
               </StackPanel>
+            </StackPanel>
 
-              <!-- Rich Presence Content -->
-              <StackPanel x:Name="RichPresenceContent" IsVisible="False" Classes="ContentPage" Spacing="16">
-                <!-- Basic Info -->
+            <!-- ==================== 2. RICH PRESENCE STUDIO ==================== -->
+            <Grid x:Name="RichPresenceContent" IsVisible="False" ColumnDefinitions="*,320">
+
+              <!-- Left Form Column -->
+              <StackPanel Grid.Column="0" Spacing="16" Margin="0,0,20,0">
+                <!-- Identity & Activity -->
                 <Border Classes="AnimatedCard">
-                  <StackPanel Spacing="16">
-                    <TextBlock Text="{DynamicResource Str_BasicInfo}" FontSize="16" FontWeight="SemiBold" Foreground="{DynamicResource ForegroundBrush}" />
+                  <StackPanel Spacing="14">
+                    <TextBlock Text="{DynamicResource Str_BasicInfo}" FontSize="15" FontWeight="Bold" />
                     <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto,Auto">
-                      <StackPanel Grid.Column="0" Margin="0,0,8,16">
-                        <TextBlock Text="{DynamicResource Str_ClientID}" Foreground="{DynamicResource ForegroundBrush}" FontSize="12" Margin="0,0,0,4" />
-                        <TextBox x:Name="AppIdBox" Watermark="{DynamicResource WM_AppID}" Classes="ModernBox" />
+                      <StackPanel Grid.Row="0" Grid.Column="0" Margin="0,0,8,12">
+                        <TextBlock Text="{DynamicResource Str_ClientID}" Classes="FieldLabel" />
+                        <TextBox x:Name="AppIdBox" Watermark="{DynamicResource WM_AppID}" Classes="ModernBox" FontFamily="{StaticResource MonoFont}" TextChanged="OnRpcPreviewChanged" />
                       </StackPanel>
-                      <StackPanel Grid.Column="1" Margin="8,0,0,16">
-                        <TextBlock Text="{DynamicResource Str_Details}" Foreground="{DynamicResource ForegroundBrush}" FontSize="12" Margin="0,0,0,4" />
-                        <TextBox x:Name="DetailsBox" Watermark="{DynamicResource WM_Details}" Classes="ModernBox" />
-                      </StackPanel>
-
-                      <StackPanel Grid.Row="1" Grid.Column="0" Margin="0,0,8,0">
-                        <TextBlock Text="{DynamicResource Str_State}" Foreground="{DynamicResource ForegroundBrush}" FontSize="12" Margin="0,0,0,4" />
-                        <TextBox x:Name="StateBox" Watermark="{DynamicResource WM_State}" Classes="ModernBox" />
-                      </StackPanel>
-
-                      <CheckBox x:Name="TimestampCheck" Grid.Row="1" Grid.Column="1" Content="{DynamicResource Str_ShowTime}" Margin="8,20,0,0" Foreground="{DynamicResource TextBrush}" />
-
-                      <StackPanel Grid.Row="2" Grid.Column="0" Margin="0,16,8,0">
-                        <TextBlock Text="{DynamicResource Str_ActivityType}" Foreground="{DynamicResource ForegroundBrush}" FontSize="12" Margin="0,0,0,4" />
-                        <ComboBox x:Name="ActivityTypeSelector" SelectedIndex="0" HorizontalAlignment="Stretch">
+                      <StackPanel Grid.Row="0" Grid.Column="1" Margin="8,0,0,12">
+                        <TextBlock Text="{DynamicResource Str_ActivityType}" Classes="FieldLabel" />
+                        <ComboBox x:Name="ActivityTypeSelector" SelectedIndex="0" HorizontalAlignment="Stretch" SelectionChanged="OnRpcActivityTypeChanged">
                           <ComboBoxItem Content="{DynamicResource Str_Act_Playing}" />
                           <ComboBoxItem Content="{DynamicResource Str_Act_Listening}" />
                           <ComboBoxItem Content="{DynamicResource Str_Act_Watching}" />
                           <ComboBoxItem Content="{DynamicResource Str_Act_Competing}" />
                         </ComboBox>
                       </StackPanel>
+
+                      <StackPanel Grid.Row="1" Grid.Column="0" Margin="0,0,8,12">
+                        <TextBlock Text="{DynamicResource Str_Details}" Classes="FieldLabel" />
+                        <TextBox x:Name="DetailsBox" Watermark="{DynamicResource WM_Details}" Classes="ModernBox" TextChanged="OnRpcPreviewChanged" />
+                      </StackPanel>
+                      <StackPanel Grid.Row="1" Grid.Column="1" Margin="8,0,0,12">
+                        <TextBlock Text="{DynamicResource Str_State}" Classes="FieldLabel" />
+                        <TextBox x:Name="StateBox" Watermark="{DynamicResource WM_State}" Classes="ModernBox" TextChanged="OnRpcPreviewChanged" />
+                      </StackPanel>
+
+                      <CheckBox x:Name="TimestampCheck" Grid.Row="2" Grid.ColumnSpan="2" Content="{DynamicResource Str_ShowTime}" Foreground="{DynamicResource TextBrush}" IsCheckedChanged="OnRpcTimestampChanged" />
                     </Grid>
                   </StackPanel>
                 </Border>
 
-                <!-- Images -->
+                <!-- Art Assets -->
                 <Border Classes="AnimatedCard">
-                  <StackPanel Spacing="16">
-                    <TextBlock Text="{DynamicResource Str_Images}" FontSize="16" FontWeight="SemiBold" Foreground="{DynamicResource ForegroundBrush}" />
+                  <StackPanel Spacing="14">
+                    <TextBlock Text="{DynamicResource Str_Images}" FontSize="15" FontWeight="Bold" />
                     <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto">
-                      <StackPanel Grid.Row="0" Grid.Column="0" Margin="0,0,8,16">
-                        <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
-                          <TextBlock Text="{DynamicResource Str_LargeImgKey}" Foreground="{DynamicResource ForegroundBrush}" FontSize="12" />
-                          <TextBlock Text="(?)" Foreground="{DynamicResource AccentBrush}" FontSize="12" Margin="4,0,0,0" Cursor="Help"
-                                     ToolTip.Tip="1. Go to Discord Developer Portal -> Your App -> Rich Presence -> Art Assets.&#x0a;2. Upload an image and give it a name (e.g. 'my-logo').&#x0a;3. Type that EXACT name here." />
+                      <StackPanel Grid.Row="0" Grid.Column="0" Margin="0,0,8,12">
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,6">
+                          <TextBlock Text="{DynamicResource Str_LargeImgKey}" FontSize="12" FontWeight="SemiBold" Foreground="{DynamicResource TextBrush}" />
+                          <TextBlock Text=" (?)" Foreground="{DynamicResource AccentBrush}" FontSize="12" Cursor="Help"
+                                     ToolTip.Tip="Upload art in Discord Developer Portal -> Rich Presence -> Art Assets and enter the exact asset key name." />
                         </StackPanel>
-                        <TextBox x:Name="LargeImageKeyBox" Watermark="{DynamicResource WM_KeyName}" Classes="ModernBox" />
+                        <TextBox x:Name="LargeImageKeyBox" Watermark="{DynamicResource WM_KeyName}" Classes="ModernBox" TextChanged="OnRpcPreviewChanged" />
                       </StackPanel>
-                      <StackPanel Grid.Row="0" Grid.Column="1" Margin="8,0,0,16">
-                        <TextBlock Text="{DynamicResource Str_LargeImgText}" Foreground="{DynamicResource ForegroundBrush}" FontSize="12" Margin="0,0,0,4" />
-                        <TextBox x:Name="LargeImageTextBox" Watermark="{DynamicResource WM_HoverText}" Classes="ModernBox" />
+                      <StackPanel Grid.Row="0" Grid.Column="1" Margin="8,0,0,12">
+                        <TextBlock Text="{DynamicResource Str_LargeImgText}" Classes="FieldLabel" />
+                        <TextBox x:Name="LargeImageTextBox" Watermark="{DynamicResource WM_HoverText}" Classes="ModernBox" TextChanged="OnRpcPreviewChanged" />
                       </StackPanel>
 
                       <StackPanel Grid.Row="1" Grid.Column="0" Margin="0,0,8,0">
-                        <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
-                          <TextBlock Text="{DynamicResource Str_SmallImgKey}" Foreground="{DynamicResource ForegroundBrush}" FontSize="12" />
-                          <TextBlock Text="(?)" Foreground="{DynamicResource AccentBrush}" FontSize="12" Margin="4,0,0,0" Cursor="Help"
-                                     ToolTip.Tip="1. Go to Discord Developer Portal -> Your App -> Rich Presence -> Art Assets.&#x0a;2. Upload an image and give it a name (e.g. 'my-logo').&#x0a;3. Type that EXACT name here." />
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,6">
+                          <TextBlock Text="{DynamicResource Str_SmallImgKey}" FontSize="12" FontWeight="SemiBold" Foreground="{DynamicResource TextBrush}" />
+                          <TextBlock Text=" (?)" Foreground="{DynamicResource AccentBrush}" FontSize="12" Cursor="Help"
+                                     ToolTip.Tip="Small circular badge asset key from Discord Developer Portal." />
                         </StackPanel>
-                        <TextBox x:Name="SmallImageKeyBox" Watermark="{DynamicResource WM_KeyName}" Classes="ModernBox" />
+                        <TextBox x:Name="SmallImageKeyBox" Watermark="{DynamicResource WM_KeyName}" Classes="ModernBox" TextChanged="OnRpcPreviewChanged" />
                       </StackPanel>
                       <StackPanel Grid.Row="1" Grid.Column="1" Margin="8,0,0,0">
-                        <TextBlock Text="{DynamicResource Str_SmallImgText}" Foreground="{DynamicResource ForegroundBrush}" FontSize="12" Margin="0,0,0,4" />
-                        <TextBox x:Name="SmallImageTextBox" Watermark="{DynamicResource WM_HoverText}" Classes="ModernBox" />
+                        <TextBlock Text="{DynamicResource Str_SmallImgText}" Classes="FieldLabel" />
+                        <TextBox x:Name="SmallImageTextBox" Watermark="{DynamicResource WM_HoverText}" Classes="ModernBox" TextChanged="OnRpcPreviewChanged" />
                       </StackPanel>
                     </Grid>
                   </StackPanel>
                 </Border>
 
-                <!-- Buttons -->
+                <!-- Buttons & Party -->
                 <Border Classes="AnimatedCard">
-                  <StackPanel Spacing="16">
-                    <TextBlock Text="{DynamicResource Str_Buttons}" FontSize="16" FontWeight="SemiBold" Foreground="{DynamicResource ForegroundBrush}" />
+                  <StackPanel Spacing="14">
+                    <TextBlock Text="{DynamicResource Str_Buttons}" FontSize="15" FontWeight="Bold" />
                     <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto">
-                      <StackPanel Grid.Row="0" Grid.Column="0" Margin="0,0,8,16">
-                        <TextBlock Text="{DynamicResource Str_Btn1Label}" Foreground="{DynamicResource ForegroundBrush}" FontSize="12" Margin="0,0,0,4" />
-                        <TextBox x:Name="Btn1LabelBox" Watermark="{DynamicResource WM_BtnLabel}" Classes="ModernBox" />
+                      <StackPanel Grid.Row="0" Grid.Column="0" Margin="0,0,8,12">
+                        <TextBlock Text="{DynamicResource Str_Btn1Label}" Classes="FieldLabel" />
+                        <TextBox x:Name="Btn1LabelBox" Watermark="{DynamicResource WM_BtnLabel}" Classes="ModernBox" TextChanged="OnRpcPreviewChanged" />
                       </StackPanel>
-                      <StackPanel Grid.Row="0" Grid.Column="1" Margin="8,0,0,16">
-                        <TextBlock Text="{DynamicResource Str_Btn1Url}" Foreground="{DynamicResource ForegroundBrush}" FontSize="12" Margin="0,0,0,4" />
+                      <StackPanel Grid.Row="0" Grid.Column="1" Margin="8,0,0,12">
+                        <TextBlock Text="{DynamicResource Str_Btn1Url}" Classes="FieldLabel" />
                         <TextBox x:Name="Btn1UrlBox" Watermark="{DynamicResource WM_BtnUrl}" Classes="ModernBox" />
                       </StackPanel>
 
                       <StackPanel Grid.Row="1" Grid.Column="0" Margin="0,0,8,0">
-                        <TextBlock Text="{DynamicResource Str_Btn2Label}" Foreground="{DynamicResource ForegroundBrush}" FontSize="12" Margin="0,0,0,4" />
-                        <TextBox x:Name="Btn2LabelBox" Watermark="{DynamicResource WM_BtnLabel}" Classes="ModernBox" />
+                        <TextBlock Text="{DynamicResource Str_Btn2Label}" Classes="FieldLabel" />
+                        <TextBox x:Name="Btn2LabelBox" Watermark="{DynamicResource WM_BtnLabel}" Classes="ModernBox" TextChanged="OnRpcPreviewChanged" />
                       </StackPanel>
                       <StackPanel Grid.Row="1" Grid.Column="1" Margin="8,0,0,0">
-                        <TextBlock Text="{DynamicResource Str_Btn2Url}" Foreground="{DynamicResource ForegroundBrush}" FontSize="12" Margin="0,0,0,4" />
+                        <TextBlock Text="{DynamicResource Str_Btn2Url}" Classes="FieldLabel" />
                         <TextBox x:Name="Btn2UrlBox" Watermark="{DynamicResource WM_BtnUrl}" Classes="ModernBox" />
                       </StackPanel>
                     </Grid>
-                  </StackPanel>
-                </Border>
 
-                <!-- Party Info -->
-                <Border Classes="AnimatedCard">
-                  <StackPanel Spacing="16">
-                    <TextBlock Text="{DynamicResource Str_Party}" FontSize="16" FontWeight="SemiBold" Foreground="{DynamicResource ForegroundBrush}" />
+                    <Separator Background="{DynamicResource BorderBrush}" Height="1" Margin="0,4" />
+
+                    <TextBlock Text="{DynamicResource Str_Party}" FontSize="14" FontWeight="Bold" />
                     <Grid ColumnDefinitions="*,*">
                       <StackPanel Grid.Column="0" Margin="0,0,8,0">
-                        <TextBlock Text="{DynamicResource Str_CurSize}" Foreground="{DynamicResource ForegroundBrush}" FontSize="12" Margin="0,0,0,4" />
-                        <TextBox x:Name="PartySizeBox" Watermark="0" Classes="ModernBox" />
+                        <TextBlock Text="{DynamicResource Str_CurSize}" Classes="FieldLabel" />
+                        <TextBox x:Name="PartySizeBox" Watermark="0" Classes="ModernBox" TextChanged="OnRpcPreviewChanged" />
                       </StackPanel>
                       <StackPanel Grid.Column="1" Margin="8,0,0,0">
-                        <TextBlock Text="{DynamicResource Str_MaxSize}" Foreground="{DynamicResource ForegroundBrush}" FontSize="12" Margin="0,0,0,4" />
-                        <TextBox x:Name="PartyMaxBox" Watermark="0" Classes="ModernBox" />
+                        <TextBlock Text="{DynamicResource Str_MaxSize}" Classes="FieldLabel" />
+                        <TextBox x:Name="PartyMaxBox" Watermark="0" Classes="ModernBox" TextChanged="OnRpcPreviewChanged" />
                       </StackPanel>
                     </Grid>
                   </StackPanel>
                 </Border>
-
-                <Grid ColumnDefinitions="*,*">
-                  <Button Grid.Column="0" Content="{DynamicResource Str_UpdatePresence}" Click="UpdatePresence_Click" Classes="AnimatedButton" HorizontalAlignment="Stretch" Margin="0,0,8,0" Background="#5B21B6" />
-                  <Button Grid.Column="1" Content="{DynamicResource Str_ClearPresence}" Click="ClearPresence_Click" Classes="AnimatedButton" HorizontalAlignment="Stretch" Margin="8,0,0,0" Background="#7F1D1D" Foreground="#FCA5A5" />
-                </Grid>
               </StackPanel>
 
-              <!-- Discord Bot -->
-              <StackPanel x:Name="DiscordBotContent" IsVisible="False" Classes="ContentPage" Spacing="16">
-                <Border Classes="AnimatedCard">
-                  <StackPanel Spacing="16">
-                    <Grid ColumnDefinitions="*,Auto">
-                      <TextBlock Text="Discord Bot Runner" FontSize="16" FontWeight="SemiBold" Foreground="{DynamicResource ForegroundBrush}" VerticalAlignment="Center" />
-                      <TextBlock x:Name="DiscordBotStatusText" Grid.Column="1" Text="{DynamicResource Str_BotStopped}" FontSize="13" FontWeight="SemiBold" Foreground="#94A3B8" VerticalAlignment="Center" />
-                    </Grid>
+              <!-- Right Live Discord Activity Preview Card -->
+              <StackPanel Grid.Column="1" Spacing="14">
+                <Border Background="#111214" BorderBrush="#2B2D31" BorderThickness="1" CornerRadius="12" Padding="18">
+                  <StackPanel Spacing="14">
+                    <TextBlock Text="{DynamicResource Str_LivePreview}" Classes="Eyebrow" Foreground="#B5BAC1" />
 
-                    <StackPanel>
-                      <TextBlock Text="{DynamicResource Str_BotToken}" Foreground="{DynamicResource ForegroundBrush}" FontSize="13" FontWeight="Medium" Margin="0,0,0,6" />
-                      <TextBox x:Name="DiscordBotTokenBox" Watermark="{DynamicResource WM_Token}" Classes="ModernBox" Padding="10" PasswordChar="•" />
-                    </StackPanel>
+                    <!-- Discord Activity Box -->
+                    <Border Background="#1E1F22" CornerRadius="10" Padding="14">
+                      <StackPanel Spacing="12">
+                        <TextBlock x:Name="PreviewActivityHeader" Text="PLAYING A GAME" FontSize="10.5" FontWeight="Bold" LetterSpacing="0.6" Foreground="#B5BAC1" />
 
-                    <Grid ColumnDefinitions="*,Auto">
-                      <StackPanel Grid.Column="0" Margin="0,0,8,0">
-                        <TextBlock Text="{DynamicResource Str_ScriptPath}" Foreground="{DynamicResource ForegroundBrush}" FontSize="13" FontWeight="Medium" Margin="0,0,0,6" />
-                        <TextBox x:Name="DiscordBotScriptBox" Watermark="{DynamicResource WM_Path}" Classes="ModernBox" Padding="10" />
+                        <Grid ColumnDefinitions="Auto,*">
+                          <!-- Artwork Square -->
+                          <Grid Width="68" Height="68" VerticalAlignment="Top">
+                            <Border Width="64" Height="64" HorizontalAlignment="Left" VerticalAlignment="Top" CornerRadius="10" Background="#2B2D31" BorderBrush="#383A40" BorderThickness="1" ClipToBounds="True">
+                              <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="3">
+                                <Image Source="NEW LOGO.png" Width="32" Height="32" Opacity="0.9" />
+                                <TextBlock x:Name="PreviewAssetKeyText" Text="app-asset" FontSize="9" Foreground="#949BA4" HorizontalAlignment="Center" MaxWidth="56" TextTrimming="CharacterEllipsis" />
+                              </StackPanel>
+                            </Border>
+                            <Border x:Name="PreviewSmallAssetBadge" Width="24" Height="24" CornerRadius="12" Background="#5865F2" BorderBrush="#1E1F22" BorderThickness="3" HorizontalAlignment="Right" VerticalAlignment="Bottom" IsVisible="False">
+                              <TextBlock Text="★" FontSize="9" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                            </Border>
+                          </Grid>
+
+                          <!-- Activity Lines -->
+                          <StackPanel Grid.Column="1" Margin="12,0,0,0" VerticalAlignment="Center" Spacing="2">
+                            <TextBlock x:Name="PreviewAppNameText" Text="DiscordMultiTool" FontSize="13.5" FontWeight="Bold" Foreground="#F2F3F5" TextTrimming="CharacterEllipsis" />
+                            <TextBlock x:Name="PreviewDetailsText" Text="In Studio" FontSize="12" Foreground="#DBDEE1" TextTrimming="CharacterEllipsis" />
+                            <TextBlock x:Name="PreviewStateText" Text="Configuring Presence" FontSize="12" Foreground="#B5BAC1" TextTrimming="CharacterEllipsis" />
+                            <TextBlock x:Name="PreviewTimerText" Text="00:00 elapsed" FontSize="11.5" FontWeight="SemiBold" Foreground="#23A55A" FontFamily="{StaticResource MonoFont}" Margin="0,2,0,0" IsVisible="False" />
+                          </StackPanel>
+                        </Grid>
+
+                        <!-- Preview Buttons -->
+                        <StackPanel Spacing="6">
+                          <Border x:Name="PreviewBtn1Border" Background="#2B2D31" CornerRadius="6" Padding="10,7" IsVisible="False">
+                            <TextBlock x:Name="PreviewBtn1Text" Text="Visit Website" FontSize="12.5" FontWeight="SemiBold" Foreground="#F2F3F5" HorizontalAlignment="Center" TextTrimming="CharacterEllipsis" />
+                          </Border>
+                          <Border x:Name="PreviewBtn2Border" Background="#2B2D31" CornerRadius="6" Padding="10,7" IsVisible="False">
+                            <TextBlock x:Name="PreviewBtn2Text" Text="Button 2" FontSize="12.5" FontWeight="SemiBold" Foreground="#F2F3F5" HorizontalAlignment="Center" TextTrimming="CharacterEllipsis" />
+                          </Border>
+                        </StackPanel>
                       </StackPanel>
-                      <Button Grid.Column="1" Content="{DynamicResource Str_Browse}" Click="BrowseDiscordScript_Click" Classes="AnimatedButton" VerticalAlignment="Bottom" />
-                    </Grid>
+                    </Border>
 
-                    <StackPanel>
-                      <TextBlock Text="{DynamicResource Str_PythonPath}" Foreground="{DynamicResource ForegroundBrush}" FontSize="13" FontWeight="Medium" Margin="0,0,0,6" />
-                      <TextBox x:Name="DiscordBotPythonBox" Text="python" Watermark="python" Classes="ModernBox" Padding="10" />
-                    </StackPanel>
-
-                    <StackPanel Orientation="Horizontal" Spacing="10">
-                      <Button x:Name="DiscordBotToggleBtn" Content="{DynamicResource Str_LaunchBot}" Click="ToggleDiscordBot_Click" Classes="AnimatedButton" Padding="24,10" Background="#5B21B6" />
-                      <Button Content="{DynamicResource Str_ClearLogs}" Click="ClearDiscordBotLogs_Click" Classes="AnimatedButton" Padding="16,10" />
-                    </StackPanel>
-                  </StackPanel>
-                </Border>
-
-                <Border Classes="AnimatedCard">
-                  <StackPanel Spacing="8">
-                    <TextBlock Text="{DynamicResource Str_BotConsole}" FontSize="14" FontWeight="SemiBold" Foreground="{DynamicResource ForegroundBrush}" />
-                    <TextBox x:Name="DiscordBotLogBox"
-                             IsReadOnly="True"
-                             AcceptsReturn="True"
-                             TextWrapping="Wrap"
-                             Height="220"
-                             FontFamily="Consolas, Courier New, monospace"
-                             FontSize="12"
-                             Background="{DynamicResource BackgroundBrush}"
-                             Foreground="#CBD5E1"
-                             BorderBrush="{DynamicResource BorderBrush}"
-                             BorderThickness="1"
-                             CornerRadius="6"
-                             Padding="10" />
+                    <!-- Action Buttons right below preview -->
+                    <Button Content="{DynamicResource Str_UpdatePresence}" Click="UpdatePresence_Click" Classes="PrimaryButton" HorizontalAlignment="Stretch" Padding="16,11" />
+                    <Button Content="{DynamicResource Str_ClearPresence}" Click="ClearPresence_Click" Classes="DangerButton" HorizontalAlignment="Stretch" />
                   </StackPanel>
                 </Border>
               </StackPanel>
+            </Grid>
 
-              <!-- Telegram Bot -->
-              <StackPanel x:Name="TelegramBotContent" IsVisible="False" Classes="ContentPage" Spacing="16">
-                <Border Classes="AnimatedCard">
-                  <StackPanel Spacing="16">
-                    <Grid ColumnDefinitions="*,Auto">
-                      <TextBlock Text="Telegram Bot Runner" FontSize="16" FontWeight="SemiBold" Foreground="{DynamicResource ForegroundBrush}" VerticalAlignment="Center" />
-                      <TextBlock x:Name="TelegramBotStatusText" Grid.Column="1" Text="{DynamicResource Str_BotStopped}" FontSize="13" FontWeight="SemiBold" Foreground="#94A3B8" VerticalAlignment="Center" />
-                    </Grid>
-
-                    <StackPanel>
-                      <TextBlock Text="{DynamicResource Str_BotToken}" Foreground="{DynamicResource ForegroundBrush}" FontSize="13" FontWeight="Medium" Margin="0,0,0,6" />
-                      <TextBox x:Name="TelegramBotTokenBox" Watermark="{DynamicResource WM_Token}" Classes="ModernBox" Padding="10" PasswordChar="•" />
+            <!-- ==================== 3. DISCORD BOT RUNNER ==================== -->
+            <StackPanel x:Name="DiscordBotContent" IsVisible="False" Spacing="16">
+              <Border Classes="AnimatedCard">
+                <StackPanel Spacing="16">
+                  <Grid ColumnDefinitions="Auto,*,Auto">
+                    <Border Width="36" Height="36" CornerRadius="9" Background="{DynamicResource AccentSoftBrush}">
+                      <PathIcon Width="16" Height="16" Foreground="{DynamicResource AccentBrush}"
+                                Data="M20,19V7H4V19H20M20,3A2,2 0 0,1 22,5V19A2,2 0 0,1 20,21H4A2,2 0 0,1 2,19V5C2,3.89 2.89,3 4,3H20Z" />
+                    </Border>
+                    <StackPanel Grid.Column="1" Margin="12,0" VerticalAlignment="Center">
+                      <TextBlock Text="Discord Python Environment" FontSize="15" FontWeight="Bold" />
+                      <TextBlock Text="Injects DISCORD_TOKEN and BOT_TOKEN automatically" FontSize="12" Foreground="{DynamicResource TextMutedBrush}" />
                     </StackPanel>
-
-                    <Grid ColumnDefinitions="*,Auto">
-                      <StackPanel Grid.Column="0" Margin="0,0,8,0">
-                        <TextBlock Text="{DynamicResource Str_ScriptPath}" Foreground="{DynamicResource ForegroundBrush}" FontSize="13" FontWeight="Medium" Margin="0,0,0,6" />
-                        <TextBox x:Name="TelegramBotScriptBox" Watermark="{DynamicResource WM_Path}" Classes="ModernBox" Padding="10" />
-                      </StackPanel>
-                      <Button Grid.Column="1" Content="{DynamicResource Str_Browse}" Click="BrowseTelegramScript_Click" Classes="AnimatedButton" VerticalAlignment="Bottom" />
-                    </Grid>
-
-                    <StackPanel>
-                      <TextBlock Text="{DynamicResource Str_PythonPath}" Foreground="{DynamicResource ForegroundBrush}" FontSize="13" FontWeight="Medium" Margin="0,0,0,6" />
-                      <TextBox x:Name="TelegramBotPythonBox" Text="python" Watermark="python" Classes="ModernBox" Padding="10" />
-                    </StackPanel>
-
-                    <StackPanel Orientation="Horizontal" Spacing="10">
-                      <Button x:Name="TelegramBotToggleBtn" Content="{DynamicResource Str_LaunchBot}" Click="ToggleTelegramBot_Click" Classes="AnimatedButton" Padding="24,10" Background="#065F46" />
-                      <Button Content="{DynamicResource Str_ClearLogs}" Click="ClearTelegramBotLogs_Click" Classes="AnimatedButton" Padding="16,10" />
-                    </StackPanel>
-                  </StackPanel>
-                </Border>
-
-                <Border Classes="AnimatedCard">
-                  <StackPanel Spacing="8">
-                    <TextBlock Text="{DynamicResource Str_BotConsole}" FontSize="14" FontWeight="SemiBold" Foreground="{DynamicResource ForegroundBrush}" />
-                    <TextBox x:Name="TelegramBotLogBox"
-                             IsReadOnly="True"
-                             AcceptsReturn="True"
-                             TextWrapping="Wrap"
-                             Height="220"
-                             FontFamily="Consolas, Courier New, monospace"
-                             FontSize="12"
-                             Background="{DynamicResource BackgroundBrush}"
-                             Foreground="#CBD5E1"
-                             BorderBrush="{DynamicResource BorderBrush}"
-                             BorderThickness="1"
-                             CornerRadius="6"
-                             Padding="10" />
-                  </StackPanel>
-                </Border>
-              </StackPanel>
-
-              <!-- Process Manager -->
-              <StackPanel x:Name="ProcessManagerContent" IsVisible="False" Classes="ContentPage" Spacing="12">
-                <Grid ColumnDefinitions="*,Auto">
-                  <TextBox x:Name="ProcessSearchBox" Watermark="{DynamicResource Str_SearchProcesses}" Classes="ModernBox" Margin="0,0,12,0" TextChanged="OnProcessSearchChanged" />
-                  <Button Grid.Column="1" Content="{DynamicResource Str_Refresh}" Click="RefreshProcesses_Click" Classes="AnimatedButton" Padding="16,8" FontSize="13" />
-                </Grid>
-
-                <Border Classes="AnimatedCard" Padding="0">
-                  <Grid RowDefinitions="*,Auto">
-                    <ListBox x:Name="ProcessListBox" Height="420" Background="Transparent" BorderThickness="0" Margin="4" />
-                    <Border Grid.Row="1" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="0,1,0,0" Padding="12">
-                      <Button Content="{DynamicResource Str_EndProcess}" Click="KillProcess_Click" Classes="AnimatedButton" HorizontalAlignment="Right" Background="#7F1D1D" Foreground="#FCA5A5" />
+                    <Border x:Name="DiscordBotBadge" Grid.Column="2" CornerRadius="14" Padding="12,5" Background="{DynamicResource SurfaceElevatedBrush}" VerticalAlignment="Center">
+                      <TextBlock x:Name="DiscordBotStatusText" Text="{DynamicResource Str_BotStopped}" FontSize="11.5" FontWeight="Bold" FontFamily="{StaticResource MonoFont}" Foreground="{DynamicResource TextBrush}" />
                     </Border>
                   </Grid>
-                </Border>
-              </StackPanel>
 
-              <!-- Settings -->
-              <StackPanel x:Name="SettingsContent" IsVisible="False" Classes="ContentPage">
-                <Border Classes="AnimatedCard">
-                  <StackPanel Spacing="24">
-                    <StackPanel>
-                      <TextBlock Text="{DynamicResource Str_Behavior}" FontSize="16" FontWeight="Bold" Foreground="{DynamicResource ForegroundBrush}" Margin="0,0,0,16" />
+                  <Grid ColumnDefinitions="2*,*" RowDefinitions="Auto,Auto">
+                    <StackPanel Grid.Row="0" Grid.Column="0" Margin="0,0,10,12">
+                      <TextBlock Text="{DynamicResource Str_ScriptPath}" Classes="FieldLabel" />
+                      <Grid ColumnDefinitions="*,Auto">
+                        <TextBox x:Name="DiscordBotScriptBox" Watermark="{DynamicResource WM_Path}" Classes="ModernBox" Margin="0,0,8,0" FontFamily="{StaticResource MonoFont}" />
+                        <Button Grid.Column="1" Content="{DynamicResource Str_Browse}" Click="BrowseDiscordScript_Click" Classes="AnimatedButton" />
+                      </Grid>
+                    </StackPanel>
+
+                    <StackPanel Grid.Row="0" Grid.Column="1" Margin="10,0,0,12">
+                      <TextBlock Text="{DynamicResource Str_PythonPath}" Classes="FieldLabel" />
+                      <TextBox x:Name="DiscordBotPythonBox" Text="python" Watermark="python" Classes="ModernBox" FontFamily="{StaticResource MonoFont}" />
+                    </StackPanel>
+
+                    <StackPanel Grid.Row="1" Grid.ColumnSpan="2">
+                      <TextBlock Text="{DynamicResource Str_BotToken}" Classes="FieldLabel" />
+                      <TextBox x:Name="DiscordBotTokenBox" Watermark="{DynamicResource WM_Token}" Classes="ModernBox" PasswordChar="•" />
+                    </StackPanel>
+                  </Grid>
+
+                  <StackPanel Orientation="Horizontal" Spacing="10">
+                    <Button x:Name="DiscordBotToggleBtn" Content="{DynamicResource Str_LaunchBot}" Click="ToggleDiscordBot_Click" Classes="PrimaryButton" Padding="22,9" />
+                    <Button Content="{DynamicResource Str_CopyLogs}" Click="CopyDiscordBotLogs_Click" Classes="AnimatedButton" />
+                    <Button Content="{DynamicResource Str_ClearLogs}" Click="ClearDiscordBotLogs_Click" Classes="AnimatedButton" />
+                  </StackPanel>
+                </StackPanel>
+              </Border>
+
+              <!-- Terminal Window Card -->
+              <Border Background="#07090E" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="12" ClipToBounds="True">
+                <StackPanel>
+                  <Border Background="#0E111A" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="0,0,0,1" Padding="14,9">
+                    <Grid ColumnDefinitions="Auto,*,Auto">
+                      <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+                        <Ellipse Width="9" Height="9" Fill="#F23F43" Opacity="0.8" />
+                        <Ellipse Width="9" Height="9" Fill="#F0B232" Opacity="0.8" />
+                        <Ellipse Width="9" Height="9" Fill="#23A55A" Opacity="0.8" />
+                      </StackPanel>
+                      <TextBlock Grid.Column="1" Text="{DynamicResource Str_BotConsole}" Classes="Eyebrow" Margin="12,0,0,0" VerticalAlignment="Center" />
+                      <TextBlock Grid.Column="2" Text="python -u • UTF-8" FontSize="11" FontFamily="{StaticResource MonoFont}" Foreground="{DynamicResource TextMutedBrush}" VerticalAlignment="Center" />
+                    </Grid>
+                  </Border>
+                  <TextBox x:Name="DiscordBotLogBox"
+                           IsReadOnly="True"
+                           AcceptsReturn="True"
+                           TextWrapping="Wrap"
+                           Height="250"
+                           FontFamily="{StaticResource MonoFont}"
+                           FontSize="12"
+                           Background="Transparent"
+                           Foreground="#D1D9E6"
+                           BorderThickness="0"
+                           Padding="14,12"
+                           Watermark="Console ready. Select a Python script and click Start Runner..." />
+                </StackPanel>
+              </Border>
+            </StackPanel>
+
+            <!-- ==================== 4. TELEGRAM BOT RUNNER ==================== -->
+            <StackPanel x:Name="TelegramBotContent" IsVisible="False" Spacing="16">
+              <Border Classes="AnimatedCard">
+                <StackPanel Spacing="16">
+                  <Grid ColumnDefinitions="Auto,*,Auto">
+                    <Border Width="36" Height="36" CornerRadius="9" Background="{DynamicResource TelegramSoftBrush}">
+                      <PathIcon Width="16" Height="16" Foreground="{DynamicResource TelegramBrush}"
+                                Data="M9.78,18.65L10.06,14.42L17.74,7.5C18.08,7.19 17.67,7.04 17.22,7.31L7.74,13.3L3.64,12C2.76,11.75 2.75,11.14 3.84,10.7L19.81,4.54C20.54,4.21 21.24,4.72 20.96,5.84L18.24,18.65C18.05,19.56 17.5,19.78 16.74,19.36L12.6,16.3L10.61,18.23C10.38,18.46 10.19,18.65 9.78,18.65Z" />
+                    </Border>
+                    <StackPanel Grid.Column="1" Margin="12,0" VerticalAlignment="Center">
+                      <TextBlock Text="Telegram Python Environment" FontSize="15" FontWeight="Bold" />
+                      <TextBlock Text="Injects TELEGRAM_TOKEN and BOT_TOKEN automatically" FontSize="12" Foreground="{DynamicResource TextMutedBrush}" />
+                    </StackPanel>
+                    <Border x:Name="TelegramBotBadge" Grid.Column="2" CornerRadius="14" Padding="12,5" Background="{DynamicResource SurfaceElevatedBrush}" VerticalAlignment="Center">
+                      <TextBlock x:Name="TelegramBotStatusText" Text="{DynamicResource Str_BotStopped}" FontSize="11.5" FontWeight="Bold" FontFamily="{StaticResource MonoFont}" Foreground="{DynamicResource TextBrush}" />
+                    </Border>
+                  </Grid>
+
+                  <Grid ColumnDefinitions="2*,*" RowDefinitions="Auto,Auto">
+                    <StackPanel Grid.Row="0" Grid.Column="0" Margin="0,0,10,12">
+                      <TextBlock Text="{DynamicResource Str_ScriptPath}" Classes="FieldLabel" />
+                      <Grid ColumnDefinitions="*,Auto">
+                        <TextBox x:Name="TelegramBotScriptBox" Watermark="{DynamicResource WM_Path}" Classes="ModernBox" Margin="0,0,8,0" FontFamily="{StaticResource MonoFont}" />
+                        <Button Grid.Column="1" Content="{DynamicResource Str_Browse}" Click="BrowseTelegramScript_Click" Classes="AnimatedButton" />
+                      </Grid>
+                    </StackPanel>
+
+                    <StackPanel Grid.Row="0" Grid.Column="1" Margin="10,0,0,12">
+                      <TextBlock Text="{DynamicResource Str_PythonPath}" Classes="FieldLabel" />
+                      <TextBox x:Name="TelegramBotPythonBox" Text="python" Watermark="python" Classes="ModernBox" FontFamily="{StaticResource MonoFont}" />
+                    </StackPanel>
+
+                    <StackPanel Grid.Row="1" Grid.ColumnSpan="2">
+                      <TextBlock Text="{DynamicResource Str_BotToken}" Classes="FieldLabel" />
+                      <TextBox x:Name="TelegramBotTokenBox" Watermark="{DynamicResource WM_Token}" Classes="ModernBox" PasswordChar="•" />
+                    </StackPanel>
+                  </Grid>
+
+                  <StackPanel Orientation="Horizontal" Spacing="10">
+                    <Button x:Name="TelegramBotToggleBtn" Content="{DynamicResource Str_LaunchBot}" Click="ToggleTelegramBot_Click" Classes="PrimaryButton" Padding="22,9" />
+                    <Button Content="{DynamicResource Str_CopyLogs}" Click="CopyTelegramBotLogs_Click" Classes="AnimatedButton" />
+                    <Button Content="{DynamicResource Str_ClearLogs}" Click="ClearTelegramBotLogs_Click" Classes="AnimatedButton" />
+                  </StackPanel>
+                </StackPanel>
+              </Border>
+
+              <!-- Terminal Window Card -->
+              <Border Background="#07090E" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="12" ClipToBounds="True">
+                <StackPanel>
+                  <Border Background="#0E111A" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="0,0,0,1" Padding="14,9">
+                    <Grid ColumnDefinitions="Auto,*,Auto">
+                      <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+                        <Ellipse Width="9" Height="9" Fill="#F23F43" Opacity="0.8" />
+                        <Ellipse Width="9" Height="9" Fill="#F0B232" Opacity="0.8" />
+                        <Ellipse Width="9" Height="9" Fill="#23A55A" Opacity="0.8" />
+                      </StackPanel>
+                      <TextBlock Grid.Column="1" Text="{DynamicResource Str_BotConsole}" Classes="Eyebrow" Margin="12,0,0,0" VerticalAlignment="Center" />
+                      <TextBlock Grid.Column="2" Text="python -u • UTF-8" FontSize="11" FontFamily="{StaticResource MonoFont}" Foreground="{DynamicResource TextMutedBrush}" VerticalAlignment="Center" />
+                    </Grid>
+                  </Border>
+                  <TextBox x:Name="TelegramBotLogBox"
+                           IsReadOnly="True"
+                           AcceptsReturn="True"
+                           TextWrapping="Wrap"
+                           Height="250"
+                           FontFamily="{StaticResource MonoFont}"
+                           FontSize="12"
+                           Background="Transparent"
+                           Foreground="#D1D9E6"
+                           BorderThickness="0"
+                           Padding="14,12"
+                           Watermark="Console ready. Select a Python script and click Start Runner..." />
+                </StackPanel>
+              </Border>
+            </StackPanel>
+
+            <!-- ==================== 5. PROCESS MONITOR ==================== -->
+            <StackPanel x:Name="ProcessManagerContent" IsVisible="False" Spacing="14">
+              <Grid ColumnDefinitions="*,Auto,Auto">
+                <TextBox x:Name="ProcessSearchBox"
+                         Watermark="{DynamicResource Str_SearchProcesses}"
+                         Classes="ModernBox"
+                         Margin="0,0,10,0"
+                         TextChanged="OnProcessSearchChanged" />
+                <Border Grid.Column="1" Background="{DynamicResource SurfaceBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="8" Padding="12,0" Margin="0,0,10,0">
+                  <TextBlock x:Name="ProcessCountBadge" Text="0 apps" FontSize="12" FontWeight="SemiBold" FontFamily="{StaticResource MonoFont}" Foreground="{DynamicResource TextBrush}" VerticalAlignment="Center" />
+                </Border>
+                <Button Grid.Column="2" Content="{DynamicResource Str_Refresh}" Click="RefreshProcesses_Click" Classes="AnimatedButton" Padding="16,9" />
+              </Grid>
+
+              <Border Classes="AnimatedCard" Padding="0" ClipToBounds="True">
+                <Grid RowDefinitions="Auto,*,Auto">
+                  <!-- Table Column Header -->
+                  <Border Grid.Row="0" Background="#10131D" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="0,0,0,1" Padding="18,10">
+                    <Grid ColumnDefinitions="*,110,110">
+                      <TextBlock Text="APPLICATION / WINDOW TITLE" Classes="Eyebrow" />
+                      <TextBlock Grid.Column="1" Text="MEMORY" Classes="Eyebrow" HorizontalAlignment="Right" />
+                      <TextBlock Grid.Column="2" Text="PROCESS ID" Classes="Eyebrow" HorizontalAlignment="Right" />
+                    </Grid>
+                  </Border>
+
+                  <!-- Structured Process List -->
+                  <ListBox x:Name="ProcessListBox" Grid.Row="1" Height="420" Background="Transparent" BorderThickness="0" Padding="4">
+                    <ListBox.Template>
+                      <ControlTemplate>
+                        <Border Name="border"
+                                ClipToBounds="{TemplateBinding ClipToBounds}"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="{TemplateBinding CornerRadius}">
+                          <local:SmoothScrollViewer Name="PART_ScrollViewer"
+                                                    AllowAutoHide="{TemplateBinding (ScrollViewer.AllowAutoHide)}"
+                                                    HorizontalScrollBarVisibility="{TemplateBinding (ScrollViewer.HorizontalScrollBarVisibility)}"
+                                                    VerticalScrollBarVisibility="{TemplateBinding (ScrollViewer.VerticalScrollBarVisibility)}">
+                            <ItemsPresenter Name="PART_ItemsPresenter"
+                                            ItemsPanel="{TemplateBinding ItemsPanel}"
+                                            Margin="{TemplateBinding Padding}" />
+                          </local:SmoothScrollViewer>
+                        </Border>
+                      </ControlTemplate>
+                    </ListBox.Template>
+                    <ListBox.ItemTemplate>
+                      <DataTemplate x:DataType="models:ProcessInfoItem">
+                        <Grid ColumnDefinitions="*,110,110" VerticalAlignment="Center">
+                          <StackPanel Grid.Column="0" Spacing="2" VerticalAlignment="Center" Margin="2,0,12,0">
+                            <TextBlock Text="{Binding Name}" FontSize="13.5" FontWeight="SemiBold" Foreground="{DynamicResource ForegroundBrush}" />
+                            <TextBlock Text="{Binding SubtitleText}" FontSize="11.5" Foreground="{DynamicResource TextMutedBrush}" TextTrimming="CharacterEllipsis" />
+                          </StackPanel>
+                          <TextBlock Grid.Column="1" Text="{Binding MemoryText}" FontSize="12" FontFamily="{StaticResource MonoFont}" Foreground="{DynamicResource TextBrush}" HorizontalAlignment="Right" VerticalAlignment="Center" />
+                          <Border Grid.Column="2" Background="{DynamicResource BackgroundBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="8,3" HorizontalAlignment="Right" VerticalAlignment="Center">
+                            <TextBlock Text="{Binding PidText}" FontSize="11" FontFamily="{StaticResource MonoFont}" Foreground="{DynamicResource AccentBrush}" />
+                          </Border>
+                        </Grid>
+                      </DataTemplate>
+                    </ListBox.ItemTemplate>
+                  </ListBox>
+
+                  <!-- Bottom Action Bar -->
+                  <Border Grid.Row="2" Background="#10131D" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="0,1,0,0" Padding="16,12">
+                    <Grid ColumnDefinitions="*,Auto">
+                      <TextBlock Text="Select a windowed process above to terminate it immediately." FontSize="12" Foreground="{DynamicResource TextMutedBrush}" VerticalAlignment="Center" />
+                      <Button Grid.Column="1" Content="{DynamicResource Str_EndProcess}" Click="KillProcess_Click" Classes="DangerButton" />
+                    </Grid>
+                  </Border>
+                </Grid>
+              </Border>
+            </StackPanel>
+
+            <!-- ==================== 6. SETTINGS & HUD STUDIO ==================== -->
+            <StackPanel x:Name="SettingsContent" IsVisible="False" Spacing="18">
+              <Grid ColumnDefinitions="*,*">
+
+                <!-- Left Column: General Behavior + HUD Options -->
+                <StackPanel Grid.Column="0" Spacing="16" Margin="0,0,10,0">
+                  <Border Classes="AnimatedCard">
+                    <StackPanel Spacing="16">
+                      <TextBlock Text="{DynamicResource Str_Behavior}" FontSize="15" FontWeight="Bold" />
 
                       <Grid ColumnDefinitions="*,Auto">
-                        <StackPanel>
-                          <TextBlock Text="{DynamicResource Str_AutoStart}" FontWeight="Medium" Foreground="{DynamicResource ForegroundBrush}" />
-                          <TextBlock Text="{DynamicResource Str_AutoStartDesc}" FontSize="12" Foreground="{DynamicResource TextBrush}" Margin="0,4,0,0" />
+                        <StackPanel VerticalAlignment="Center" Margin="0,0,12,0">
+                          <TextBlock Text="{DynamicResource Str_AutoStart}" FontSize="13.5" FontWeight="SemiBold" />
+                          <TextBlock Text="{DynamicResource Str_AutoStartDesc}" FontSize="11.5" Foreground="{DynamicResource TextMutedBrush}" Margin="0,2,0,0" TextWrapping="Wrap" />
                         </StackPanel>
-                        <ToggleSwitch x:Name="AutoStartSwitch" Grid.Column="1" OnContent="On" OffContent="Off" />
+                        <ToggleSwitch x:Name="AutoStartSwitch" Grid.Column="1" OnContent="" OffContent="" VerticalAlignment="Center" />
                       </Grid>
 
-                      <Separator Background="{DynamicResource BorderBrush}" Height="1" Margin="0,12" />
+                      <Separator Background="{DynamicResource BorderBrush}" Height="1" />
 
                       <Grid ColumnDefinitions="*,Auto">
-                        <StackPanel>
-                          <TextBlock Text="{DynamicResource Str_OverlayPos}" FontWeight="Medium" Foreground="{DynamicResource ForegroundBrush}" />
-                          <TextBlock Text="{DynamicResource Str_OverlayPosDesc}" FontSize="12" Foreground="{DynamicResource TextBrush}" Margin="0,4,0,0" />
+                        <StackPanel VerticalAlignment="Center" Margin="0,0,12,0">
+                          <TextBlock Text="{DynamicResource Str_Language}" FontSize="13.5" FontWeight="SemiBold" />
+                          <TextBlock Text="{DynamicResource Str_LanguageDesc}" FontSize="11.5" Foreground="{DynamicResource TextMutedBrush}" Margin="0,2,0,0" />
                         </StackPanel>
-                        <ComboBox x:Name="OverlayPosSelector" Grid.Column="1" Width="170" SelectedIndex="0" SelectionChanged="OnOverlayPositionChanged">
+                        <ComboBox x:Name="LanguageChoice" Grid.Column="1" Width="150" SelectedIndex="0" SelectionChanged="LanguageChoice_SelectionChanged">
+                          <ComboBoxItem Tag="en">English</ComboBoxItem>
+                          <ComboBoxItem Tag="it">Italiano</ComboBoxItem>
+                        </ComboBox>
+                      </Grid>
+
+                      <Separator Background="{DynamicResource BorderBrush}" Height="1" />
+
+                      <Grid ColumnDefinitions="*,Auto">
+                        <StackPanel VerticalAlignment="Center" Margin="0,0,12,0">
+                          <TextBlock Text="{DynamicResource Str_CloseButtonBehavior}" FontSize="13.5" FontWeight="SemiBold" />
+                          <TextBlock Text="{DynamicResource Str_CloseButtonBehaviorDesc}" FontSize="11.5" Foreground="{DynamicResource TextMutedBrush}" Margin="0,2,0,0" />
+                        </StackPanel>
+                        <ComboBox x:Name="CloseButtonBehaviorSelector" Grid.Column="1" Width="150" SelectedIndex="0">
+                          <ComboBoxItem Tag="minimize" Content="{DynamicResource Str_MinimizeToTray}" />
+                          <ComboBoxItem Tag="close" Content="{DynamicResource Str_CloseApp}" />
+                        </ComboBox>
+                      </Grid>
+
+                      <Separator Background="{DynamicResource BorderBrush}" Height="1" />
+
+                      <Grid ColumnDefinitions="*,Auto">
+                        <StackPanel VerticalAlignment="Center" Margin="0,0,12,0">
+                          <TextBlock Text="{DynamicResource Str_OverlayPos}" FontSize="13.5" FontWeight="SemiBold" />
+                          <TextBlock Text="{DynamicResource Str_OverlayPosDesc}" FontSize="11.5" Foreground="{DynamicResource TextMutedBrush}" Margin="0,2,0,0" />
+                        </StackPanel>
+                        <ComboBox x:Name="OverlayPosSelector" Grid.Column="1" Width="150" SelectedIndex="0" SelectionChanged="OnOverlayPositionChanged">
                           <ComboBoxItem Tag="Top Left" Content="{DynamicResource Str_Pos_TopLeft}" />
                           <ComboBoxItem Tag="Top Right" Content="{DynamicResource Str_Pos_TopRight}" />
                           <ComboBoxItem Tag="Bottom Left" Content="{DynamicResource Str_Pos_BotLeft}" />
                           <ComboBoxItem Tag="Bottom Right" Content="{DynamicResource Str_Pos_BotRight}" />
                         </ComboBox>
                       </Grid>
+                    </StackPanel>
+                  </Border>
 
-                      <Separator Background="{DynamicResource BorderBrush}" Height="1" Margin="0,12" />
+                  <!-- HUD Appearance Switches & Opacity -->
+                  <Border Classes="AnimatedCard">
+                    <StackPanel Spacing="16">
+                      <TextBlock Text="{DynamicResource Str_Settings_Appearance}" FontSize="15" FontWeight="Bold" />
 
                       <Grid ColumnDefinitions="*,Auto">
-                        <StackPanel>
-                          <TextBlock Text="{DynamicResource Str_Language}" FontWeight="Medium" Foreground="{DynamicResource ForegroundBrush}" />
-                          <TextBlock Text="{DynamicResource Str_LanguageDesc}" FontSize="12" Foreground="{DynamicResource TextBrush}" Margin="0,4,0,0" />
+                        <StackPanel VerticalAlignment="Center">
+                          <TextBlock Text="{DynamicResource Str_Settings_Rainbow}" FontSize="13.5" FontWeight="SemiBold" />
+                          <TextBlock Text="{DynamicResource Str_Settings_RainbowDesc}" FontSize="11.5" Foreground="{DynamicResource TextMutedBrush}" Margin="0,2,0,0" />
                         </StackPanel>
-                        <ComboBox x:Name="LanguageChoice" Grid.Column="1" Width="170" SelectedIndex="0" SelectionChanged="LanguageChoice_SelectionChanged">
-                          <ComboBoxItem Tag="en">English</ComboBoxItem>
-                          <ComboBoxItem Tag="it">Italiano</ComboBoxItem>
-                        </ComboBox>
+                        <ToggleSwitch x:Name="OverlayRainbowSwitch" Grid.Column="1" OnContent="" OffContent="" IsCheckedChanged="OnRealTimeSettingChanged" VerticalAlignment="Center" />
                       </Grid>
 
-                      <Separator Background="{DynamicResource BorderBrush}" Height="1" Margin="0,12" />
+                      <Separator Background="{DynamicResource BorderBrush}" Height="1" />
 
                       <Grid ColumnDefinitions="*,Auto">
-                        <StackPanel>
-                          <TextBlock Text="{DynamicResource Str_CloseButtonBehavior}" FontWeight="Medium" Foreground="{DynamicResource ForegroundBrush}" />
-                          <TextBlock Text="{DynamicResource Str_CloseButtonBehaviorDesc}" FontSize="12" Foreground="{DynamicResource TextBrush}" Margin="0,4,0,0" />
+                        <StackPanel VerticalAlignment="Center">
+                          <TextBlock Text="{DynamicResource Str_Settings_Border}" FontSize="13.5" FontWeight="SemiBold" />
+                          <TextBlock Text="{DynamicResource Str_Settings_BorderDesc}" FontSize="11.5" Foreground="{DynamicResource TextMutedBrush}" Margin="0,2,0,0" />
                         </StackPanel>
-                        <ComboBox x:Name="CloseButtonBehaviorSelector" Grid.Column="1" Width="170" SelectedIndex="0">
-                          <ComboBoxItem Tag="minimize" Content="{DynamicResource Str_MinimizeToTray}" />
-                          <ComboBoxItem Tag="close" Content="{DynamicResource Str_CloseApp}" />
-                        </ComboBox>
+                        <ToggleSwitch x:Name="OverlayBorderSwitch" Grid.Column="1" OnContent="" OffContent="" IsChecked="True" IsCheckedChanged="OnRealTimeSettingChanged" VerticalAlignment="Center" />
                       </Grid>
 
-                      <!-- Overlay Appearance -->
-                      <Separator Background="{DynamicResource BorderBrush}" Height="1" Margin="0,16" />
-                      <TextBlock Text="{DynamicResource Str_Settings_Appearance}" FontWeight="Bold" FontSize="16" Foreground="{DynamicResource ForegroundBrush}" Margin="0,0,0,12" />
+                      <Separator Background="{DynamicResource BorderBrush}" Height="1" />
 
-                      <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto,Auto,Auto" Margin="0,0,4,0">
-                        <StackPanel Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,0,12">
-                          <TextBlock Text="{DynamicResource Str_Settings_Rainbow}" FontWeight="Medium" Foreground="{DynamicResource ForegroundBrush}" />
-                          <TextBlock Text="{DynamicResource Str_Settings_RainbowDesc}" FontSize="11" Foreground="{DynamicResource TextBrush}" />
-                        </StackPanel>
-                        <ToggleSwitch x:Name="OverlayRainbowSwitch" Grid.Row="0" Grid.Column="1" OnContent="On" OffContent="Off" HorizontalAlignment="Right" IsCheckedChanged="OnRealTimeSettingChanged" Margin="0,0,0,12" />
-
-                        <StackPanel Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,0,12">
-                          <TextBlock Text="{DynamicResource Str_Settings_Border}" FontWeight="Medium" Foreground="{DynamicResource ForegroundBrush}" />
-                          <TextBlock Text="{DynamicResource Str_Settings_BorderDesc}" FontSize="11" Foreground="{DynamicResource TextBrush}" />
-                        </StackPanel>
-                        <ToggleSwitch x:Name="OverlayBorderSwitch" Grid.Row="1" Grid.Column="1" OnContent="On" OffContent="Off" IsChecked="True" HorizontalAlignment="Right" IsCheckedChanged="OnRealTimeSettingChanged" Margin="0,0,0,12" />
-
-                        <StackPanel Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,0,12">
-                          <TextBlock Text="{DynamicResource Str_Settings_BgOpacity}" FontWeight="Medium" Foreground="{DynamicResource ForegroundBrush}" />
-                        </StackPanel>
-                        <local:SmoothSlider x:Name="OverlayBgOpacitySlider" Grid.Row="2" Grid.Column="1" Width="170" Minimum="0" Maximum="1" Value="0.75" ValueChanged="OnSliderChanged" Margin="0,0,0,12" />
-
-                        <StackPanel Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,0,12">
-                          <TextBlock Text="{DynamicResource Str_Settings_MasterOpacity}" FontWeight="Medium" Foreground="{DynamicResource ForegroundBrush}" />
-                        </StackPanel>
-                        <local:SmoothSlider x:Name="OverlayMasterOpacitySlider" Grid.Row="3" Grid.Column="1" Width="170" Minimum="0.1" Maximum="1" Value="1.0" ValueChanged="OnSliderChanged" Margin="0,0,0,12" />
-                      </Grid>
-
-                      <Separator Background="{DynamicResource BorderBrush}" Height="1" Margin="0,12" />
-
-                      <!-- Color Editor Section -->
-                      <Border Classes="AnimatedCard" Padding="20" Margin="0,12,0,0" Background="{DynamicResource BackgroundBrush}">
-                        <StackPanel Spacing="16">
-                          <TextBlock Text="{DynamicResource Str_ColorEditor}" FontWeight="Bold" FontSize="16" Foreground="{DynamicResource ForegroundBrush}" />
-                          <Grid ColumnDefinitions="*,Auto,Auto" RowDefinitions="Auto,Auto">
-                            <StackPanel Grid.Row="0" Grid.Column="0" VerticalAlignment="Center">
-                              <TextBlock Text="{DynamicResource Str_EditTarget}" FontWeight="Medium" Foreground="{DynamicResource ForegroundBrush}" />
-                              <TextBlock Text="{DynamicResource Str_EditTargetDesc}" FontSize="11" Foreground="{DynamicResource TextBrush}" />
-                            </StackPanel>
-                            <ComboBox x:Name="ColorTargetSelector" Grid.Row="0" Grid.Column="1" Width="140" Margin="0,0,12,0" SelectedIndex="0" SelectionChanged="OnColorTargetChanged">
-                              <ComboBoxItem Tag="bg">Background</ComboBoxItem>
-                              <ComboBoxItem Tag="border">Border</ComboBoxItem>
-                              <ComboBoxItem Tag="text">Text</ComboBoxItem>
-                            </ComboBox>
-
-                            <StackPanel Grid.Row="0" Grid.Column="2" VerticalAlignment="Center">
-                              <TextBlock Text="{DynamicResource Str_HexColor}" FontSize="11" Foreground="{DynamicResource TextBrush}" Margin="0,0,0,4" />
-                              <TextBox x:Name="HexColorInput" Width="110" Classes="ModernBox" Watermark="#RRGGBB" TextChanged="OnHexInputChanged" />
-                            </StackPanel>
-
-                            <StackPanel Grid.Row="1" Grid.ColumnSpan="3" Margin="0,20,0,0" Spacing="12" HorizontalAlignment="Stretch">
-                              <TextBlock Text="{DynamicResource Str_ColorWheel}" FontSize="12" Foreground="{DynamicResource TextBrush}" FontWeight="Medium" />
-
-                              <Border x:Name="ColorPreviewBorder" Height="72" CornerRadius="8" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="2" HorizontalAlignment="Stretch" Margin="0,0,0,8" Background="#BF0F172A" />
-
-                              <Grid ColumnDefinitions="56,*,40">
-                                <TextBlock Text="R:" Foreground="{DynamicResource TextBrush}" FontSize="11" VerticalAlignment="Center" />
-                                <local:SmoothSlider x:Name="RedSlider" Grid.Column="1" Minimum="0" Maximum="255" Value="15" ValueChanged="OnColorSliderChanged" Margin="8,0" />
-                                <TextBlock x:Name="RedValue" Grid.Column="2" Text="15" Foreground="{DynamicResource TextBrush}" FontSize="11" TextAlignment="Right" VerticalAlignment="Center" />
-                              </Grid>
-
-                              <Grid ColumnDefinitions="56,*,40">
-                                <TextBlock Text="G:" Foreground="{DynamicResource TextBrush}" FontSize="11" VerticalAlignment="Center" />
-                                <local:SmoothSlider x:Name="GreenSlider" Grid.Column="1" Minimum="0" Maximum="255" Value="23" ValueChanged="OnColorSliderChanged" Margin="8,0" />
-                                <TextBlock x:Name="GreenValue" Grid.Column="2" Text="23" Foreground="{DynamicResource TextBrush}" FontSize="11" TextAlignment="Right" VerticalAlignment="Center" />
-                              </Grid>
-
-                              <Grid ColumnDefinitions="56,*,40">
-                                <TextBlock Text="B:" Foreground="{DynamicResource TextBrush}" FontSize="11" VerticalAlignment="Center" />
-                                <local:SmoothSlider x:Name="BlueSlider" Grid.Column="1" Minimum="0" Maximum="255" Value="42" ValueChanged="OnColorSliderChanged" Margin="8,0" />
-                                <TextBlock x:Name="BlueValue" Grid.Column="2" Text="42" Foreground="{DynamicResource TextBrush}" FontSize="11" TextAlignment="Right" VerticalAlignment="Center" />
-                              </Grid>
-
-                              <Grid ColumnDefinitions="56,*,40" Margin="0,4,0,0">
-                                <TextBlock Text="{DynamicResource Str_Opacity}" Foreground="{DynamicResource TextBrush}" FontSize="11" VerticalAlignment="Center" />
-                                <local:SmoothSlider x:Name="AlphaSlider" Grid.Column="1" Minimum="0" Maximum="255" Value="191" ValueChanged="OnColorSliderChanged" Margin="8,0" />
-                                <TextBlock x:Name="AlphaValue" Grid.Column="2" Text="191" Foreground="{DynamicResource TextBrush}" FontSize="11" TextAlignment="Right" VerticalAlignment="Center" />
-                              </Grid>
-                            </StackPanel>
-                          </Grid>
-                        </StackPanel>
-                      </Border>
-                    </StackPanel>
-
-                    <Button x:Name="SaveSettingsBtn" Content="{DynamicResource Str_SaveConfig}" Click="SaveSettings" Classes="AnimatedButton" HorizontalAlignment="Right" Background="#5B21B6" />
-                  </StackPanel>
-                </Border>
-              </StackPanel>
-
-              <!-- Firebase Login Content -->
-              <StackPanel x:Name="LoginContent" IsVisible="False" Classes="ContentPage">
-                <Border Classes="AnimatedCard" Padding="32">
-                  <StackPanel Spacing="16" Width="400" HorizontalAlignment="Left">
-                    <TextBlock Text="Authentication" FontSize="20" FontWeight="Bold" Foreground="{DynamicResource ForegroundBrush}" Margin="0,0,0,8" />
-
-                    <StackPanel>
-                      <TextBlock Text="Email" Foreground="{DynamicResource ForegroundBrush}" FontSize="14" FontWeight="Medium" Margin="0,0,0,8" />
-                      <TextBox x:Name="LoginEmailBox" Watermark="user@example.com" Classes="ModernBox" Padding="12" />
-                    </StackPanel>
-
-                    <StackPanel>
-                      <TextBlock Text="Password" Foreground="{DynamicResource ForegroundBrush}" FontSize="14" FontWeight="Medium" Margin="0,0,0,8" />
-                      <TextBox x:Name="LoginPasswordBox" Watermark="••••••••" Classes="ModernBox" Padding="12" PasswordChar="•" />
-                    </StackPanel>
-
-                    <TextBlock x:Name="LoginStatusText" Text="" Foreground="#FCA5A5" FontSize="13" TextWrapping="Wrap" />
-
-                    <Grid ColumnDefinitions="*,*" Margin="0,8,0,0">
-                      <Button Content="Log In" Click="Login_Click" Classes="AnimatedButton" HorizontalAlignment="Stretch" Margin="0,0,8,0" Background="#5B21B6" />
-                      <Button Grid.Column="1" Content="Register" Click="Register_Click" Classes="AnimatedButton" HorizontalAlignment="Stretch" Background="#334155" Margin="8,0,0,0" />
-                    </Grid>
-
-                    <Button Click="LoginGoogle_Click" Classes="AnimatedButton" HorizontalAlignment="Stretch" Background="#4285F4" Foreground="White" Margin="0,4,0,0">
-                      <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="8">
-                        <PathIcon Data="M21.35,11.1H12.18V13.83H18.69C18.36,17.64 15.19,19.27 12.19,19.27C8.36,19.27 5,16.25 5,12C5,7.9 8.2,4.73 12.2,4.73C15.29,4.73 17.1,6.7 17.1,6.7L19,4.72C19,4.72 16.56,2 12.1,2C6.42,2 2.03,6.8 2.03,12C2.03,17.05 6.16,22 12.25,22C17.6,22 21.5,18.33 21.5,12.91C21.5,11.76 21.35,11.1 21.35,11.1Z" />
-                        <TextBlock Text="Login with Google" VerticalAlignment="Center" />
+                      <StackPanel Spacing="6">
+                        <TextBlock Text="{DynamicResource Str_Settings_BgOpacity}" FontSize="12.5" FontWeight="SemiBold" Foreground="{DynamicResource TextBrush}" />
+                        <local:SmoothSlider x:Name="OverlayBgOpacitySlider" Minimum="0" Maximum="1" Value="0.75" ValueChanged="OnSliderChanged" />
                       </StackPanel>
-                    </Button>
 
-                    <Button x:Name="LogoutBtn" Content="Sign Out" Click="Logout_Click" Classes="AnimatedButton" HorizontalAlignment="Stretch" Background="#7F1D1D" Foreground="#FCA5A5" IsVisible="False" />
-                  </StackPanel>
-                </Border>
-              </StackPanel>
+                      <StackPanel Spacing="6">
+                        <TextBlock Text="{DynamicResource Str_Settings_MasterOpacity}" FontSize="12.5" FontWeight="SemiBold" Foreground="{DynamicResource TextBrush}" />
+                        <local:SmoothSlider x:Name="OverlayMasterOpacitySlider" Minimum="0.1" Maximum="1" Value="1.0" ValueChanged="OnSliderChanged" />
+                      </StackPanel>
+                    </StackPanel>
+                  </Border>
+                </StackPanel>
 
+                <!-- Right Column: HUD Color Studio + Save -->
+                <StackPanel Grid.Column="1" Spacing="16" Margin="10,0,0,0">
+                  <Border Classes="AnimatedCard">
+                    <StackPanel Spacing="16">
+                      <TextBlock Text="{DynamicResource Str_ColorEditor}" FontSize="15" FontWeight="Bold" />
+
+                      <Grid ColumnDefinitions="*,Auto">
+                        <StackPanel Margin="0,0,10,0">
+                          <TextBlock Text="{DynamicResource Str_EditTarget}" Classes="FieldLabel" />
+                          <ComboBox x:Name="ColorTargetSelector" HorizontalAlignment="Stretch" SelectedIndex="0" SelectionChanged="OnColorTargetChanged">
+                            <ComboBoxItem Tag="bg">HUD Surface</ComboBoxItem>
+                            <ComboBoxItem Tag="border">HUD Border</ComboBoxItem>
+                            <ComboBoxItem Tag="text">HUD Active Text</ComboBoxItem>
+                          </ComboBox>
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="1" Width="125">
+                          <TextBlock Text="{DynamicResource Str_HexColor}" Classes="FieldLabel" />
+                          <TextBox x:Name="HexColorInput" Classes="ModernBox" FontFamily="{StaticResource MonoFont}" Watermark="#RRGGBB" TextChanged="OnHexInputChanged" />
+                        </StackPanel>
+                      </Grid>
+
+                      <!-- Swatch Preview -->
+                      <Border Classes="SubtleCard" Padding="6">
+                        <Border x:Name="ColorPreviewBorder" Height="76" CornerRadius="7" BorderBrush="{DynamicResource BorderStrongBrush}" BorderThickness="1" Background="#BF0F172A" />
+                      </Border>
+
+                      <TextBlock Text="{DynamicResource Str_ColorWheel}" Classes="Eyebrow" />
+
+                      <StackPanel Spacing="10">
+                        <Grid ColumnDefinitions="52,*,38">
+                          <TextBlock Text="Red" Foreground="#F87171" FontSize="12" FontWeight="SemiBold" VerticalAlignment="Center" />
+                          <local:SmoothSlider x:Name="RedSlider" Grid.Column="1" Minimum="0" Maximum="255" Value="15" ValueChanged="OnColorSliderChanged" Margin="8,0" />
+                          <TextBlock x:Name="RedValue" Grid.Column="2" Text="15" FontFamily="{StaticResource MonoFont}" Foreground="{DynamicResource TextBrush}" FontSize="11.5" TextAlignment="Right" VerticalAlignment="Center" />
+                        </Grid>
+
+                        <Grid ColumnDefinitions="52,*,38">
+                          <TextBlock Text="Green" Foreground="#4ADE80" FontSize="12" FontWeight="SemiBold" VerticalAlignment="Center" />
+                          <local:SmoothSlider x:Name="GreenSlider" Grid.Column="1" Minimum="0" Maximum="255" Value="23" ValueChanged="OnColorSliderChanged" Margin="8,0" />
+                          <TextBlock x:Name="GreenValue" Grid.Column="2" Text="23" FontFamily="{StaticResource MonoFont}" Foreground="{DynamicResource TextBrush}" FontSize="11.5" TextAlignment="Right" VerticalAlignment="Center" />
+                        </Grid>
+
+                        <Grid ColumnDefinitions="52,*,38">
+                          <TextBlock Text="Blue" Foreground="#60A5FA" FontSize="12" FontWeight="SemiBold" VerticalAlignment="Center" />
+                          <local:SmoothSlider x:Name="BlueSlider" Grid.Column="1" Minimum="0" Maximum="255" Value="42" ValueChanged="OnColorSliderChanged" Margin="8,0" />
+                          <TextBlock x:Name="BlueValue" Grid.Column="2" Text="42" FontFamily="{StaticResource MonoFont}" Foreground="{DynamicResource TextBrush}" FontSize="11.5" TextAlignment="Right" VerticalAlignment="Center" />
+                        </Grid>
+
+                        <Grid ColumnDefinitions="52,*,38">
+                          <TextBlock Text="{DynamicResource Str_Opacity}" Foreground="{DynamicResource TextBrush}" FontSize="12" FontWeight="SemiBold" VerticalAlignment="Center" />
+                          <local:SmoothSlider x:Name="AlphaSlider" Grid.Column="1" Minimum="0" Maximum="255" Value="191" ValueChanged="OnColorSliderChanged" Margin="8,0" />
+                          <TextBlock x:Name="AlphaValue" Grid.Column="2" Text="191" FontFamily="{StaticResource MonoFont}" Foreground="{DynamicResource TextBrush}" FontSize="11.5" TextAlignment="Right" VerticalAlignment="Center" />
+                        </Grid>
+                      </StackPanel>
+
+                      <Separator Background="{DynamicResource BorderBrush}" Height="1" Margin="0,4" />
+
+                      <Button x:Name="SaveSettingsBtn" Content="{DynamicResource Str_SaveConfig}" Click="SaveSettings" Classes="PrimaryButton" HorizontalAlignment="Stretch" Padding="18,11" />
+                    </StackPanel>
+                  </Border>
+                </StackPanel>
+              </Grid>
             </StackPanel>
-          </ScrollViewer>
+
+            <!-- ==================== 7. CLOUD ACCOUNT ==================== -->
+            <StackPanel x:Name="LoginContent" IsVisible="False" HorizontalAlignment="Center" Width="440" Margin="0,16,0,0">
+              <Border Classes="AnimatedCard" Padding="32">
+                <StackPanel Spacing="18">
+                  <StackPanel HorizontalAlignment="Center" Spacing="8">
+                    <Border Width="48" Height="48" CornerRadius="14" Background="{DynamicResource AccentSoftBrush}" BorderBrush="#445865F2" BorderThickness="1" HorizontalAlignment="Center">
+                      <PathIcon Width="22" Height="22" Foreground="{DynamicResource AccentBrush}"
+                                Data="M19.35,10.04C18.67,6.59 15.64,4 12,4C9.11,4 6.6,5.64 5.35,8.04C2.34,8.36 0,10.91 0,14A6,6 0 0,0 6,20H19A5,5 0 0,0 24,15C24,12.36 21.95,10.22 19.35,10.04Z" />
+                    </Border>
+                    <TextBlock Text="Cloud Sync Account" FontSize="20" FontWeight="Bold" HorizontalAlignment="Center" />
+                    <TextBlock Text="Back up and restore your Rich Presence, HUD theme, and bot settings automatically." FontSize="12.5" Foreground="{DynamicResource TextBrush}" TextAlignment="Center" TextWrapping="Wrap" />
+                  </StackPanel>
+
+                  <StackPanel Spacing="12">
+                    <StackPanel>
+                      <TextBlock Text="Email Address" Classes="FieldLabel" />
+                      <TextBox x:Name="LoginEmailBox" Watermark="you@example.com" Classes="ModernBox" />
+                    </StackPanel>
+
+                    <StackPanel>
+                      <TextBlock Text="Password" Classes="FieldLabel" />
+                      <TextBox x:Name="LoginPasswordBox" Watermark="••••••••" Classes="ModernBox" PasswordChar="•" />
+                    </StackPanel>
+                  </StackPanel>
+
+                  <Border x:Name="LoginStatusBanner" Classes="SubtleCard" Padding="12,10" IsVisible="False">
+                    <TextBlock x:Name="LoginStatusText" Text="" FontSize="12.5" TextWrapping="Wrap" />
+                  </Border>
+
+                  <Grid ColumnDefinitions="*,*">
+                    <Button Content="Sign In" Click="Login_Click" Classes="PrimaryButton" HorizontalAlignment="Stretch" Margin="0,0,6,0" />
+                    <Button Grid.Column="1" Content="Create Account" Click="Register_Click" Classes="AnimatedButton" HorizontalAlignment="Stretch" Margin="6,0,0,0" />
+                  </Grid>
+
+                  <Grid ColumnDefinitions="*,Auto,*" VerticalAlignment="Center">
+                    <Separator Grid.Column="0" Background="{DynamicResource BorderBrush}" Height="1" />
+                    <TextBlock Grid.Column="1" Text="OR" Classes="Eyebrow" Margin="12,0" />
+                    <Separator Grid.Column="2" Background="{DynamicResource BorderBrush}" Height="1" />
+                  </Grid>
+
+                  <Button Click="LoginGoogle_Click" Classes="AnimatedButton" HorizontalAlignment="Stretch" Padding="14,10" Background="#1E2436">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="10">
+                      <PathIcon Width="15" Height="15" Foreground="White"
+                                Data="M21.35,11.1H12.18V13.83H18.69C18.36,17.64 15.19,19.27 12.19,19.27C8.36,19.27 5,16.25 5,12C5,7.9 8.2,4.73 12.2,4.73C15.29,4.73 17.1,6.7 17.1,6.7L19,4.72C19,4.72 16.56,2 12.1,2C6.42,2 2.03,6.8 2.03,12C2.03,17.05 6.16,22 12.25,22C17.6,22 21.5,18.33 21.5,12.91C21.5,11.76 21.35,11.1 21.35,11.1Z" />
+                      <TextBlock Text="Continue with Google" FontWeight="SemiBold" VerticalAlignment="Center" />
+                    </StackPanel>
+                  </Button>
+
+                  <Button x:Name="LogoutBtn" Content="Sign Out" Click="Logout_Click" Classes="DangerButton" HorizontalAlignment="Stretch" IsVisible="False" />
+                </StackPanel>
+              </Border>
+            </StackPanel>
+
+          </StackPanel>
+        </local:SmoothScrollViewer>
+      </Grid>
+    </Grid>
+
+    <!-- Bottom Telemetry Status Bar -->
+    <Border Grid.Row="1" Background="#090B10" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="0,1,0,0" Padding="16,0">
+      <Grid ColumnDefinitions="Auto,*,Auto">
+        <Ellipse Width="6" Height="6" Fill="{DynamicResource AccentBrush}" VerticalAlignment="Center" Margin="0,0,8,0" />
+        <TextBlock x:Name="StatusBar" Grid.Column="1" Text="Ready" FontSize="11.5" Foreground="{DynamicResource TextBrush}" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" />
+        <TextBlock x:Name="StatusRightSummary" Grid.Column="2" Text="MasterSharp Studio" FontSize="11" FontFamily="{StaticResource MonoFont}" Foreground="{DynamicResource TextMutedBrush}" VerticalAlignment="Center" />
+      </Grid>
+    </Border>
+
+    <!-- Startup Splash Overlay -->
+    <Grid x:Name="IntroOverlay" Grid.RowSpan="2" Background="#0B0D13" IsVisible="True" Opacity="1">
+      <Border Classes="AnimatedCard" Padding="36,32" HorizontalAlignment="Center" VerticalAlignment="Center" Background="#111521" BorderBrush="#2A324B">
+        <Grid x:Name="IntroContent" ColumnDefinitions="Auto,Auto">
+          <Border Grid.Column="0" Width="108" Height="108" CornerRadius="24" ClipToBounds="True" BorderBrush="#355865F2" BorderThickness="1" x:Name="IntroLogo" Opacity="0">
+            <Border.RenderTransform>
+              <TranslateTransform X="80" />
+            </Border.RenderTransform>
+            <Image Source="NEW LOGO.png" Stretch="UniformToFill" />
+          </Border>
+
+          <StackPanel x:Name="IntroTextPanel" Grid.Column="1" VerticalAlignment="Center" Margin="32,0,0,0" Opacity="0" Spacing="10" Width="260">
+            <TextBlock Text="DiscordMultiTool" FontSize="20" FontWeight="Bold" Foreground="{DynamicResource ForegroundBrush}" />
+
+            <Grid ColumnDefinitions="*,Auto">
+              <TextBlock x:Name="IntroDiscordText" Text="Detecting Discord client" FontSize="13" Foreground="{DynamicResource TextBrush}" />
+              <TextBlock x:Name="IntroDiscordFound" Grid.Column="1" Text="" FontSize="13" FontWeight="Bold" Opacity="0" />
+            </Grid>
+
+            <Grid ColumnDefinitions="*,Auto">
+              <TextBlock x:Name="IntroTelegramText" Text="Detecting Telegram client" FontSize="13" Foreground="{DynamicResource TextBrush}" Opacity="0" />
+              <TextBlock x:Name="IntroTelegramFound" Grid.Column="1" Text="" FontSize="13" FontWeight="Bold" Opacity="0" />
+            </Grid>
+
+            <ProgressBar x:Name="IntroProgressBar" IsIndeterminate="True" Height="3" Margin="0,6,0,0" Foreground="{DynamicResource AccentBrush}" HorizontalAlignment="Stretch" />
+          </StackPanel>
         </Grid>
       </Border>
     </Grid>
 
-    <!-- Status Bar -->
-    <Border Grid.Row="2" Background="{DynamicResource SurfaceBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="0,1,0,0">
-      <TextBlock x:Name="StatusBar" Text="Ready" FontSize="12" Foreground="{DynamicResource TextBrush}" Margin="20,8,20,8" />
-    </Border>
-
-    <!-- Intro Overlay -->
-    <Grid x:Name="IntroOverlay" Grid.RowSpan="3" Background="#0F172A" IsVisible="True" Opacity="1">
-      <Grid x:Name="IntroContent" HorizontalAlignment="Center" VerticalAlignment="Center" ColumnDefinitions="Auto,Auto">
-        <Image Grid.Column="0" Source="NEW LOGO.png" Width="150" Height="150" x:Name="IntroLogo" Opacity="0">
-          <Image.RenderTransform>
-            <TranslateTransform X="120" />
-          </Image.RenderTransform>
-        </Image>
-
-        <StackPanel x:Name="IntroTextPanel" Grid.Column="1" VerticalAlignment="Center" Margin="40,0,0,0" Opacity="0">
-          <TextBlock x:Name="IntroDiscordText" Text="Checking if Discord is open..." FontSize="18" Foreground="{DynamicResource TextBrush}" />
-          <TextBlock x:Name="IntroDiscordFound" Text="" FontSize="18" FontWeight="Bold" Margin="0,4,0,16" Opacity="0" />
-
-          <TextBlock x:Name="IntroTelegramText" Text="Checking if Telegram is open..." FontSize="18" Foreground="{DynamicResource TextBrush}" Opacity="0" />
-          <TextBlock x:Name="IntroTelegramFound" Text="" FontSize="18" FontWeight="Bold" Margin="0,4,0,16" Opacity="0" />
-
-          <ProgressBar x:Name="IntroProgressBar" IsIndeterminate="True" Width="250" Height="4" Foreground="{DynamicResource AccentBrush}" HorizontalAlignment="Left" />
-        </StackPanel>
-      </Grid>
-    </Grid>
   </Grid>
-
 </Window>

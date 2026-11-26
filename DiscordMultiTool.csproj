@@ -6,7 +6,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <Company>MasterSharp Team LLC.</Company>
-    <Version>3.5.0</Version>
+    <Version>3.6.0</Version>
     <Copyright>MasterSharp OpenSource Team</Copyright>
     <PackageProjectUrl>https://github.com/MasterSharp-Team-LLC/DiscordMultiTool</PackageProjectUrl>
     <RepositoryUrl>https://github.com/MasterSharp-Team-LLC/DiscordMultiTool</RepositoryUrl>

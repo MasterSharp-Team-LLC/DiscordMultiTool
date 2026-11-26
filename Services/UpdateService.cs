@@ -17,7 +17,7 @@ public static class UpdateService
         get
         {
             var v = Assembly.GetExecutingAssembly().GetName().Version;
-            return v != null ? new Version(v.Major, v.Minor, Math.Max(0, v.Build)) : new Version(3, 5, 0);
+            return v != null ? new Version(v.Major, v.Minor, Math.Max(0, v.Build)) : new Version(3, 6, 0);
         }
     }
 

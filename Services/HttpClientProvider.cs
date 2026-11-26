@@ -18,7 +18,7 @@ public static class HttpClientProvider
         {
             Timeout = TimeSpan.FromSeconds(15)
         };
-        client.DefaultRequestHeaders.UserAgent.ParseAdd("DiscordMultiTool/3.5");
+        client.DefaultRequestHeaders.UserAgent.ParseAdd("DiscordMultiTool/3.6");
         return client;
     }
 }
