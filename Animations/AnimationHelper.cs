@@ -1,7 +1,9 @@
 using Avalonia;
 using Avalonia.Animation;
+using Avalonia.Animation.Easings;
 using Avalonia.Controls;
 using Avalonia.Media;
+using Avalonia.Styling;
 using System;
 using System.Threading.Tasks;
 
@@ -9,142 +11,133 @@ namespace DiscordMultiTool.Animations;
 
 public static class AnimationHelper
 {
-    public const double FastDuration = 0.2;
-    public const double MediumDuration = 0.35;
-    public const double SlowDuration = 0.5;
+    public const double FastDuration = 0.18;
+    public const double MediumDuration = 0.28;
+    public const double SlowDuration = 0.45;
 
-    public static async Task FadeIn(Control control, double duration = MediumDuration)
+    public static async Task FadeIn(Control? control, double duration = MediumDuration)
     {
-        control.Opacity = 0;
-        await AnimateProperty(control, Control.OpacityProperty, 0, 1, duration);
+        if (control == null) return;
+        await AnimateDoubleAsync(control, Visual.OpacityProperty, 0.0, 1.0, duration);
     }
 
-    public static async Task FadeOut(Control control, double duration = MediumDuration)
+    public static async Task FadeOut(Control? control, double duration = MediumDuration)
     {
-        var current = control.Opacity;
-        await AnimateProperty(control, Control.OpacityProperty, current, 0, duration);
+        if (control == null) return;
+        double current = control.Opacity;
+        if (current <= 0.0) return;
+        await AnimateDoubleAsync(control, Visual.OpacityProperty, current, 0.0, duration);
     }
 
-    public static async Task ScaleIn(Control control, double duration = MediumDuration, double startScale = 0.8)
+    public static async Task ScaleIn(Control? control, double duration = MediumDuration, double startScale = 0.92)
     {
-        var scaleTransform = new ScaleTransform { ScaleX = startScale, ScaleY = startScale };
-        control.RenderTransform = scaleTransform;
-        control.Opacity = 0;
+        if (control == null) return;
 
-        var scaleTask = Task.Run(async () =>
-        {
-            await AnimateProperty(scaleTransform, ScaleTransform.ScaleXProperty, startScale, 1.0, duration);
-        });
-
-        var opacityTask = AnimateProperty(control, Control.OpacityProperty, 0, 1, duration);
-
-        await Task.WhenAll(scaleTask, opacityTask);
-    }
-
-    public static async Task SlideInFromTop(Control control, double duration = MediumDuration)
-    {
-        var translateTransform = new TranslateTransform { Y = -50 };
-        control.RenderTransform = translateTransform;
+        var scaleTransform = EnsureScaleTransform(control);
+        scaleTransform.ScaleX = startScale;
+        scaleTransform.ScaleY = startScale;
         control.Opacity = 0;
 
-        var translateTask = AnimateProperty(translateTransform, TranslateTransform.YProperty, -50, 0, duration);
-        var opacityTask = AnimateProperty(control, Control.OpacityProperty, 0, 1, duration);
-
-        await Task.WhenAll(translateTask, opacityTask);
+        await Task.WhenAll(
+            AnimateDoubleAsync(scaleTransform, ScaleTransform.ScaleXProperty, startScale, 1.0, duration),
+            AnimateDoubleAsync(scaleTransform, ScaleTransform.ScaleYProperty, startScale, 1.0, duration),
+            AnimateDoubleAsync(control, Visual.OpacityProperty, 0.0, 1.0, duration));
     }
 
-    public static async Task MoveHorizontal(Control control, double from, double to, double duration = MediumDuration)
+    public static async Task SlideInFromTop(Control? control, double duration = MediumDuration)
     {
-        TranslateTransform transform;
+        if (control == null) return;
+
+        var translate = EnsureTranslateTransform(control);
+        translate.Y = -24;
+        control.Opacity = 0;
+
+        await Task.WhenAll(
+            AnimateDoubleAsync(translate, TranslateTransform.YProperty, -24.0, 0.0, duration),
+            AnimateDoubleAsync(control, Visual.OpacityProperty, 0.0, 1.0, duration));
+    }
+
+    public static async Task MoveHorizontal(Control? control, double from, double to, double duration = MediumDuration)
+    {
+        if (control == null) return;
+
+        var translate = EnsureTranslateTransform(control);
+        translate.X = from;
+        await AnimateDoubleAsync(translate, TranslateTransform.XProperty, from, to, duration);
+    }
+
+    public static async Task PressAnimation(Button? button)
+    {
+        if (button == null) return;
+
+        var scale = EnsureScaleTransform(button);
+        double half = FastDuration / 2.0;
+
+        await Task.WhenAll(
+            AnimateDoubleAsync(scale, ScaleTransform.ScaleXProperty, 1.0, 0.96, half),
+            AnimateDoubleAsync(scale, ScaleTransform.ScaleYProperty, 1.0, 0.96, half));
+
+        await Task.WhenAll(
+            AnimateDoubleAsync(scale, ScaleTransform.ScaleXProperty, 0.96, 1.0, half),
+            AnimateDoubleAsync(scale, ScaleTransform.ScaleYProperty, 0.96, 1.0, half));
+    }
+
+    private static ScaleTransform EnsureScaleTransform(Control control)
+    {
+        if (control.RenderTransform is ScaleTransform st)
+            return st;
+
+        var created = new ScaleTransform(1.0, 1.0);
+        control.RenderTransform = created;
+        return created;
+    }
+
+    private static TranslateTransform EnsureTranslateTransform(Control control)
+    {
         if (control.RenderTransform is TranslateTransform tt)
-        {
-            transform = tt;
-        }
-        else
-        {
-            transform = new TranslateTransform();
-            control.RenderTransform = transform;
-        }
-        
-        // Ensure starting value
-        transform.X = from;
-        
-        await AnimateProperty(transform, TranslateTransform.XProperty, from, to, duration);
+            return tt;
+
+        var created = new TranslateTransform();
+        control.RenderTransform = created;
+        return created;
     }
 
-    public static async Task AnimateValue(Avalonia.Controls.Primitives.RangeBase control, double from, double to, double duration = MediumDuration)
+    private static async Task AnimateDoubleAsync(
+        Animatable target,
+        AvaloniaProperty property,
+        double startValue,
+        double endValue,
+        double durationSeconds)
     {
-        await AnimateProperty(control, Avalonia.Controls.Primitives.RangeBase.ValueProperty, from, to, duration);
-    }
-
-    public static void AddHoverAnimation(Button button)
-    {
-        var originalBackground = button.Background;
-
-        button.PointerEntered += (s, e) =>
+        if (durationSeconds <= 0)
         {
-            if (button.Background is SolidColorBrush solidBrush)
-            {
-                var color = solidBrush.Color;
-                var newColor = new Color(
-                    color.A,
-                    (byte)Math.Min(255, color.R + 15),
-                    (byte)Math.Min(255, color.G + 15),
-                    (byte)Math.Min(255, color.B + 15)
-                );
-                button.Background = new SolidColorBrush(newColor);
-            }
-        };
-
-        button.PointerExited += (s, e) =>
-        {
-            button.Background = originalBackground;
-        };
-    }
-
-    public static async Task PressAnimation(Button button)
-    {
-        var scale = new ScaleTransform { ScaleX = 1, ScaleY = 1 };
-        button.RenderTransform = scale;
-
-        await AnimateProperty(scale, ScaleTransform.ScaleXProperty, 1.0, 0.95, FastDuration / 2);
-        await AnimateProperty(scale, ScaleTransform.ScaleYProperty, 1.0, 0.95, FastDuration / 2);
-
-        await AnimateProperty(scale, ScaleTransform.ScaleXProperty, 0.95, 1.0, FastDuration / 2);
-        await AnimateProperty(scale, ScaleTransform.ScaleYProperty, 0.95, 1.0, FastDuration / 2);
-    }
-
-    private static async Task AnimateProperty(
-        AvaloniaObject target, 
-        AvaloniaProperty property, 
-        double startValue, 
-        double endValue, 
-        double duration)
-    {
-        const int frameRate = 60;
-        int frameCount = (int)(duration * frameRate);
-        var frameDuration = TimeSpan.FromSeconds(duration / frameCount);
-
-        for (int i = 0; i <= frameCount; i++)
-        {
-            double progress = (double)i / frameCount;
-            double easeProgress = EaseOutCubic(progress);
-            double value = startValue + (endValue - startValue) * easeProgress;
-
-            target.SetValue(property, value);
-
-            if (i < frameCount)
-            {
-                await Task.Delay(frameDuration);
-            }
+            target.SetValue(property, endValue);
+            return;
         }
 
+        // Pre-set local value to endValue so FillMode.None lands cleanly with zero flicker
         target.SetValue(property, endValue);
-    }
 
-    private static double EaseOutCubic(double t)
-    {
-        double p = t - 1;
-        return p * p * p + 1;
+        var animation = new Animation
+        {
+            Duration = TimeSpan.FromSeconds(durationSeconds),
+            Easing = new CubicEaseOut(),
+            FillMode = FillMode.None,
+            Children =
+            {
+                new KeyFrame
+                {
+                    Cue = new Cue(0.0),
+                    Setters = { new Setter(property, startValue) }
+                },
+                new KeyFrame
+                {
+                    Cue = new Cue(1.0),
+                    Setters = { new Setter(property, endValue) }
+                }
+            }
+        };
+
+        await animation.RunAsync(target);
     }
 }

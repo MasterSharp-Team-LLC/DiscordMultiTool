@@ -1,20 +1,20 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-<PropertyGroup>
+  <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <Company>MasterSharp Team LLC.</Company>
-    <Version>3.0.0</Version>
+    <Version>3.5.0</Version>
     <Copyright>MasterSharp OpenSource Team</Copyright>
-    <PackageProjectUrl>https://github.com/CodeSharp3210/DiscordMultiTool</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/CodeSharp3210/DiscordMultiTool</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/MasterSharp-Team-LLC/DiscordMultiTool</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/MasterSharp-Team-LLC/DiscordMultiTool</RepositoryUrl>
     <Title>DiscordMultiTool</Title>
     <Authors>MasterSharp Team LLC.</Authors>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <ApplicationIcon>NEW-LOGO.ico</ApplicationIcon>
-    
+
     <!-- Single File Publish Settings -->
     <PublishSingleFile>true</PublishSingleFile>
     <SelfContained>true</SelfContained>
@@ -23,23 +23,18 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Avalonia" Version="11.1.0" />
-    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.1.0" />
-    <PackageReference Include="Avalonia.Desktop" Version="11.1.0" />
-    <PackageReference Include="Avalonia.Diagnostics" Version="11.1.0" />
+    <PackageReference Include="Avalonia" Version="11.3.23" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.3.23" />
+    <PackageReference Include="Avalonia.Desktop" Version="11.3.23" />
+    <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.3.23" />
     <PackageReference Include="DiscordRichPresence" Version="1.6.1.70" />
     <PackageReference Include="FirebaseAuthentication.net" Version="4.1.0" />
-    <PackageReference Include="FirebaseDatabase.net" Version="5.0.0" />
-    <PackageReference Include="Google.Apis.Auth" Version="1.73.0" />
-    <PackageReference Include="System.Drawing.Common" Version="8.0.0" />
-    <PackageReference Include="System.Diagnostics.EventLog" Version="8.0.0" />
+    <PackageReference Include="Google.Apis.Auth" Version="1.78.0" />
   </ItemGroup>
 
   <ItemGroup>
     <AvaloniaResource Include="NEW LOGO.png" />
-    <None Update="secrets.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    <EmbeddedResource Include="secrets.json" Condition="Exists('secrets.json')" LogicalName="DiscordMultiTool.secrets.json" />
   </ItemGroup>
 
 </Project>

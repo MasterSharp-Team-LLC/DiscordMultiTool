@@ -1,31 +1,26 @@
 <Application xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             x:Class="DiscordMultiTool.App">
+             x:Class="DiscordMultiTool.App"
+             RequestedThemeVariant="Dark">
 
   <Application.Resources>
-    <!-- Modern Dark Palette (Zinc/Slate inspired) -->
-    <Color x:Key="BackgroundColor">#09090b</Color>
-    <Color x:Key="SurfaceColor">#18181b</Color>
-    <Color x:Key="SurfaceHoverColor">#27272a</Color>
-    <Color x:Key="AccentColor">#8b5cf6</Color> <!-- Violet-500 -->
-    <Color x:Key="AccentHoverColor">#7c3aed</Color> <!-- Violet-600 -->
-    <Color x:Key="ForegroundColor">#fafafa</Color>
-    <Color x:Key="TextColor">#a1a1aa</Color>
-    <Color x:Key="BorderColor">#27272a</Color>
-    
+    <!-- Unified Modern Dark Palette (Slate / Violet) -->
+    <Color x:Key="BackgroundColor">#0F172A</Color>
+    <Color x:Key="SurfaceColor">#1E293B</Color>
+    <Color x:Key="SurfaceHoverColor">#283548</Color>
+    <Color x:Key="AccentColor">#8B5CF6</Color>
+    <Color x:Key="AccentHoverColor">#7C3AED</Color>
+    <Color x:Key="ForegroundColor">#F8FAFC</Color>
+    <Color x:Key="TextColor">#94A3B8</Color>
+    <Color x:Key="BorderColor">#334155</Color>
+
     <SolidColorBrush x:Key="BackgroundBrush" Color="{StaticResource BackgroundColor}" />
     <SolidColorBrush x:Key="SurfaceBrush" Color="{StaticResource SurfaceColor}" />
+    <SolidColorBrush x:Key="SurfaceHoverBrush" Color="{StaticResource SurfaceHoverColor}" />
     <SolidColorBrush x:Key="ForegroundBrush" Color="{StaticResource ForegroundColor}" />
     <SolidColorBrush x:Key="TextBrush" Color="{StaticResource TextColor}" />
     <SolidColorBrush x:Key="AccentBrush" Color="{StaticResource AccentColor}" />
     <SolidColorBrush x:Key="BorderBrush" Color="{StaticResource BorderColor}" />
-
-    <!-- Button Resources -->
-    <SolidColorBrush x:Key="ButtonBackground" Color="#18181b" />
-    <SolidColorBrush x:Key="ButtonForeground" Color="#fafafa" />
-    <SolidColorBrush x:Key="ButtonBorder" Color="#27272a" />
-    <SolidColorBrush x:Key="ButtonHoverBackground" Color="#27272a" />
-    <SolidColorBrush x:Key="ButtonPressedBackground" Color="#09090b" />
   </Application.Resources>
 
   <Application.Styles>
@@ -44,16 +39,16 @@
       <Setter Property="Margin" Value="0,2" />
       <Setter Property="Transitions">
         <Transitions>
-          <BrushTransition Property="Background" Duration="0:0:0.2" />
-          <BrushTransition Property="Foreground" Duration="0:0:0.2" />
+          <BrushTransition Property="Background" Duration="0:0:0.15" />
+          <BrushTransition Property="Foreground" Duration="0:0:0.15" />
         </Transitions>
       </Setter>
     </Style>
-    <Style Selector="Button.SidebarButton:pointerover">
-      <Setter Property="Background" Value="{DynamicResource SurfaceHoverColor}" />
-      <Setter Property="Foreground" Value="White" />
+    <Style Selector="Button.SidebarButton:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+      <Setter Property="Background" Value="{DynamicResource SurfaceHoverBrush}" />
+      <Setter Property="Foreground" Value="{DynamicResource ForegroundBrush}" />
     </Style>
-    
+
     <!-- Modern Action Button -->
     <Style Selector="Button.AnimatedButton">
       <Setter Property="Background" Value="{DynamicResource SurfaceBrush}" />
@@ -66,14 +61,16 @@
       <Setter Property="VerticalContentAlignment" Value="Center" />
       <Setter Property="Transitions">
         <Transitions>
-          <BrushTransition Property="Background" Duration="0:0:0.2" />
+          <BrushTransition Property="Background" Duration="0:0:0.15" />
           <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.1" />
         </Transitions>
       </Setter>
     </Style>
+    <Style Selector="Button.AnimatedButton:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+      <Setter Property="Background" Value="{DynamicResource SurfaceHoverBrush}" />
+    </Style>
     <Style Selector="Button.AnimatedButton:pointerover">
-      <Setter Property="Background" Value="{DynamicResource SurfaceHoverColor}" />
-      <Setter Property="RenderTransform" Value="scale(1.02)" />
+      <Setter Property="RenderTransform" Value="scale(1.01)" />
     </Style>
     <Style Selector="Button.AnimatedButton:pressed">
       <Setter Property="RenderTransform" Value="scale(0.98)" />
@@ -99,7 +96,7 @@
       <Setter Property="Padding" Value="10" />
       <Setter Property="Transitions">
         <Transitions>
-          <BrushTransition Property="BorderBrush" Duration="0:0:0.2" />
+          <BrushTransition Property="BorderBrush" Duration="0:0:0.15" />
         </Transitions>
       </Setter>
     </Style>

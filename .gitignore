@@ -3,7 +3,5 @@ node_modules/
 *.lock
 secrets.json
 
-Secrets.cs
-
 bin/
 obj/
